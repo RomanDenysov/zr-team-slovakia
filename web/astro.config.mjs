@@ -12,17 +12,20 @@ const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } = loadEnv(
 );
 
 export default defineConfig({
-	build: {
-		// Use Vercel edge redirects instead of HTML meta-refresh pages.
-		redirects: false,
-	},
 	i18n: {
 		locales: ['sk', 'en', 'uk'],
 		defaultLocale: 'sk',
 		routing: {
-			prefixDefaultLocale: true,
-			redirectToDefaultLocale: true,
+			prefixDefaultLocale: false,
 		},
+	},
+	redirects: {
+		'/sk': '/',
+		'/sk/about': '/about',
+		'/sk/events': '/events',
+		'/sk/partners': '/partners',
+		'/sk/schedule': '/schedule',
+		'/sk/[slug]': '/[slug]',
 	},
 	vite: {
 		plugins: [tailwindcss()],

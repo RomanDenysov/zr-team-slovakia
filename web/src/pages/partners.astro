@@ -1,17 +1,11 @@
 ---
-import Main from '../../layouts/main.astro';
-import ModalShell from '../../components/modals/ModalShell.astro';
-import { alternateLocaleStaticPaths, resolvePageLang, type Locale } from '../../i18n/locales';
-import { translations } from '../../i18n/translations';
+import Main from '../layouts/main.astro';
+import ModalShell from '../components/modals/ModalShell.astro';
+import { defaultLocale, localeToLang } from '../i18n/locales';
+import { translations } from '../i18n/translations';
 
-export function getStaticPaths() {
-	return alternateLocaleStaticPaths();
-}
-
-const locale = Astro.params.locale as Locale;
-const lang = resolvePageLang(locale);
-if (!lang) return Astro.redirect('/');
-
+const locale = defaultLocale;
+const lang = localeToLang(locale);
 const t = translations[lang];
 ---
 

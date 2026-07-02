@@ -29,8 +29,16 @@ export function langToLocale(lang: Lang): Locale {
 	return langToLocaleMap[lang];
 }
 
+export const alternateLocales = locales.filter(
+	(locale): locale is Exclude<Locale, typeof defaultLocale> => locale !== defaultLocale,
+);
+
 export function localeStaticPaths() {
 	return locales.map((locale) => ({ params: { locale } }));
+}
+
+export function alternateLocaleStaticPaths() {
+	return alternateLocales.map((locale) => ({ params: { locale } }));
 }
 
 export function getRoutePath(pathname: string): string {
