@@ -12,6 +12,10 @@ const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } = loadEnv(
 );
 
 export default defineConfig({
+	build: {
+		// Use Vercel edge redirects instead of HTML meta-refresh pages.
+		redirects: false,
+	},
 	i18n: {
 		locales: ['sk', 'en', 'uk'],
 		defaultLocale: 'sk',
