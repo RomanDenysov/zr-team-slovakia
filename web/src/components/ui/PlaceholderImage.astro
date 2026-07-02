@@ -1,0 +1,16 @@
+---
+interface Props {
+	label: string;
+	height?: string;
+	class?: string;
+}
+
+const { label, height = 'h-[130px]', class: className = '' } = Astro.props;
+---
+
+<div
+	class:list={['ph relative flex items-end p-3.5', height, className]}
+>
+	<slot />
+	<span class="font-mono text-[11px] text-[#5a6a5d] tracking-wide">{label}</span>
+</div>

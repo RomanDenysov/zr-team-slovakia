@@ -1,0 +1,76 @@
+---
+import { getUiString } from '../../i18n/runtime';
+import type { Lang } from '../../i18n/translations';
+
+interface Props {
+	lang: Lang;
+	kickerKey: 'schedKicker';
+	titleKey: 'schedTitle';
+	titleSize?: 'md' | 'lg' | 'xl';
+	showLocationToggle?: boolean;
+}
+
+const { lang, kickerKey, titleKey, titleSize = 'lg', showLocationToggle = true } = Astro.props;
+
+const titleClasses = {
+	md: 'text-[34px]',
+	lg: 'text-[42px]',
+	xl: 'text-5xl',
+};
+---
+
+<div class="flex flex-wrap items-end justify-between gap-5">
+	<div>
+		<div
+			class="font-condensed mb-2.5 text-sm font-semibold tracking-[4px] text-zr-green"
+		>
+			{getUiString(kickerKey, lang)}
+		</div>
+		<div
+			class:list={[
+				'font-display leading-none font-bold text-white uppercase',
+				titleClasses[titleSize],
+			]}
+		>
+			{getUiString(titleKey, lang)}
+		</div>
+	</div>
+
+	{
+		showLocationToggle && (
+			<div
+				class="flex gap-1.5 rounded-lg bg-zr-bg-muted p-1.5"
+				data-location-toggle
+				role="group"
+				aria-label="Location"
+			>
+				<button
+					type="button"
+					data-loc="KE"
+					class="loc-btn font-condensed cursor-pointer rounded-md px-5 py-2 text-sm font-bold tracking-wide"
+				>
+					KOŠICE
+				</button>
+				<button
+					type="button"
+					data-loc="BA"
+					class="loc-btn font-condensed cursor-pointer rounded-md px-5 py-2 text-sm font-bold tracking-wide"
+				>
+					BRATISLAVA
+				</button>
+			</div>
+		)
+	}
+</div>
+
+<div class="mt-7 flex flex-wrap gap-2" data-filter-toggle role="group" aria-label="Class type filter">
+	<button type="button" data-filter="ALL" class="filter-btn cursor-pointer rounded-full px-4 py-2 text-[13px] font-semibold tracking-wide">ALL</button>
+	<button type="button" data-filter="Gi" class="filter-btn cursor-pointer rounded-full px-4 py-2 text-[13px] font-semibold tracking-wide">Gi</button>
+	<button type="button" data-filter="No-Gi" class="filter-btn cursor-pointer rounded-full px-4 py-2 text-[13px] font-semibold tracking-wide">No-Gi</button>
+	<button type="button" data-filter="Kids" class="filter-btn cursor-pointer rounded-full px-4 py-2 text-[13px] font-semibold tracking-wide">Kids</button>
+	<button type="button" data-filter="Open Mat" class="filter-btn cursor-pointer rounded-full px-4 py-2 text-[13px] font-semibold tracking-wide">Open Mat</button>
+</div>
+
+<div class="mt-8 grid grid-cols-7 gap-2.5" data-schedule-grid></div>
+
+<div class="mt-5 flex flex-wrap gap-5" data-schedule-legend></div>

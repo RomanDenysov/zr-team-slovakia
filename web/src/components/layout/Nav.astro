@@ -1,0 +1,70 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import LocaleSelector from '../LocaleSelector.astro';
+import { getUiString } from '../../i18n/runtime';
+import type { Lang } from '../../i18n/translations';
+import type { Locale } from '../../i18n/locales';
+
+interface Props {
+	currentPath?: string;
+	lang: Lang;
+	locale: Locale;
+}
+
+const { currentPath = '', lang, locale } = Astro.props;
+
+const navItems = [
+	{ path: 'schedule', key: 'navSchedule' as const },
+	{ path: 'events', key: 'navEvents' as const },
+	{ path: 'about', key: 'navAbout' as const },
+	{ path: 'partners', key: 'navSponsors' as const },
+];
+
+const homeHref = getRelativeLocaleUrl(locale, '');
+---
+
+<header
+	class="sticky top-0 z-50 border-b border-white/7 bg-zr-bg/92 backdrop-blur-[10px]"
+>
+	<div class="mx-auto flex max-w-[1240px] items-center justify-between px-10 py-4">
+		<a href={homeHref} class="flex cursor-pointer items-center gap-3.5">
+			<img src="/zr-logo.svg" alt="ZRTeam" class="h-11 w-11" width="44" height="44" />
+			<div class="font-condensed text-lg leading-none font-bold tracking-wide text-white">
+				ZR TEAM
+				<div class="font-body text-[9.5px] font-medium tracking-[3px] text-zr-green">
+					Brazilian Jiu-Jitsu
+				</div>
+			</div>
+		</a>
+
+		<div class="nav-desktop flex items-center gap-8">
+			<nav class="flex items-center gap-8">
+				{
+					navItems.map((item) => (
+						<a
+							href={getRelativeLocaleUrl(locale, item.path)}
+							class:list={[
+								'navlink cursor-pointer text-sm font-semibold tracking-wide transition-colors hover:text-white',
+								currentPath === item.path
+									? 'border-b-2 border-zr-green pb-0.5 text-white'
+									: 'border-b-2 border-transparent pb-0.5 text-[#c9d2cb]',
+							]}
+						>
+							{getUiString(item.key, lang)}
+						</a>
+					))
+				}
+			</nav>
+
+			<LocaleSelector locale={locale} routePath={currentPath} />
+
+			<button
+				type="button"
+				data-action="open-trial"
+				class="font-condensed cursor-pointer rounded bg-zr-green px-5 py-2.5 text-sm font-bold tracking-wide text-zr-bg uppercase"
+			>
+				{getUiString('ctaTrial', lang)}
+			</button>
+		</div>
+	</div>
+</header>

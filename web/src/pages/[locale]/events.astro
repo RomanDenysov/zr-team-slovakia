@@ -1,0 +1,54 @@
+---
+import ModalShell from '../../components/modals/ModalShell.astro';
+import EventsData from '../../components/events/EventsData.astro';
+import Main from '../../layouts/main.astro';
+import { localeStaticPaths, resolvePageLang, type Locale } from '../../i18n/locales';
+import { translations } from '../../i18n/translations';
+
+export function getStaticPaths() {
+	return localeStaticPaths();
+}
+
+const locale = Astro.params.locale as Locale;
+const lang = resolvePageLang(locale);
+if (!lang) return Astro.redirect('/sk/');
+
+const t = translations[lang];
+---
+
+<Main title="Udalosti — ZR Team" currentPath="events" lang={lang} locale={locale}>
+	<div class="mx-auto max-w-[1140px] px-10 py-16">
+		<div
+			class="font-condensed mb-2.5 text-sm font-semibold tracking-[4px] text-zr-green"
+		>
+			{t.eventsKicker}
+		</div>
+		<h1 class="font-display mb-2 text-5xl leading-none font-bold text-white uppercase">
+			{t.eventsTitle}
+		</h1>
+		<p class="mb-12 max-w-[560px] text-base text-zr-text-muted">
+			{t.eventsLead}
+		</p>
+
+		<div class="events-page-grid grid grid-cols-[300px_1fr] items-start gap-12">
+			<aside
+				class="sticky top-[90px] rounded-[10px] border border-white/7 bg-zr-bg-card p-6"
+			>
+				<div
+					class="font-display text-lg font-semibold tracking-wide text-white uppercase"
+				>
+					{t.recurringTitle}
+				</div>
+				<p class="mt-1.5 mb-4 text-[13px] leading-relaxed text-zr-text-dim">
+					{t.recurringSub}
+				</p>
+				<div class="flex flex-col gap-3" data-events-recurring></div>
+			</aside>
+
+			<div class="flex flex-col" data-events-timeline></div>
+		</div>
+	</div>
+
+	<ModalShell slot="modals" />
+	<EventsData slot="modals" lang={lang} />
+</Main>

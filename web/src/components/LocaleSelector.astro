@@ -1,0 +1,40 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { locales, type Locale } from '../i18n/locales';
+
+interface Props {
+	locale: Locale;
+	routePath: string;
+}
+
+const { locale, routePath } = Astro.props;
+
+const localeLabels: Record<Locale, string> = {
+	sk: 'SK',
+	en: 'EN',
+	uk: 'UA',
+};
+---
+
+<div
+	class="flex gap-0.5 rounded-[5px] bg-zr-bg-muted p-[3px]"
+	role="group"
+	aria-label="Language"
+>
+	{
+		locales.map((targetLocale) => (
+			<a
+				href={getRelativeLocaleUrl(targetLocale, routePath)}
+				class:list={[
+					'lang-btn rounded px-2.5 py-1.5 text-[11px] font-bold tracking-wide',
+					targetLocale === locale
+						? 'bg-zr-green text-zr-bg'
+						: 'bg-transparent text-[#c9d2cb] hover:text-white',
+				]}
+				aria-current={targetLocale === locale ? 'page' : undefined}
+			>
+				{localeLabels[targetLocale]}
+			</a>
+		))
+	}
+</div>

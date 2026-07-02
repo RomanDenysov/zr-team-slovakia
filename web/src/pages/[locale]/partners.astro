@@ -1,0 +1,54 @@
+---
+import Main from '../../layouts/main.astro';
+import ModalShell from '../../components/modals/ModalShell.astro';
+import { localeStaticPaths, resolvePageLang, type Locale } from '../../i18n/locales';
+import { translations } from '../../i18n/translations';
+
+export function getStaticPaths() {
+	return localeStaticPaths();
+}
+
+const locale = Astro.params.locale as Locale;
+const lang = resolvePageLang(locale);
+if (!lang) return Astro.redirect('/sk/');
+
+const t = translations[lang];
+---
+
+<Main title="Partneri — Zé Radiola Team" currentPath="partners" lang={lang} locale={locale}>
+	<div class="mx-auto max-w-[1240px] px-10 py-16 text-center">
+		<div
+			class="font-condensed mb-2.5 text-sm font-semibold tracking-[4px] text-zr-green"
+		>
+			{t.sponsorsKicker}
+		</div>
+		<h1 class="font-display mb-2 text-5xl leading-none font-bold text-white uppercase">
+			{t.sponsorsTitle}
+		</h1>
+		<p class="mx-auto mb-10 max-w-[560px] text-[15.5px] text-zr-text-muted">
+			{t.sponsorsSub}
+		</p>
+
+		<div class="partners-grid grid grid-cols-4 gap-4" data-partners-grid data-partners-count="8"></div>
+
+		<div
+			class="mt-11 rounded-[10px] border border-white/7 bg-zr-bg-elevated px-9 py-9"
+		>
+			<div class="font-display text-2xl font-semibold text-white uppercase">
+				{t.becomePartnerT}
+			</div>
+			<p class="mx-auto mt-2.5 max-w-[480px] text-[14.5px] text-zr-text-muted">
+				{t.becomePartnerB}
+			</p>
+			<button
+				type="button"
+				data-action="open-partner"
+				class="font-condensed mt-5 inline-block cursor-pointer rounded bg-zr-green px-8 py-3.5 text-[15px] font-bold tracking-wider text-zr-bg uppercase"
+			>
+				{t.becomePartner}
+			</button>
+		</div>
+	</div>
+
+	<ModalShell slot="modals" />
+</Main>

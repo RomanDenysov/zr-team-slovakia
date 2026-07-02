@@ -1,0 +1,19 @@
+---
+import { getEvents, getRecurringEvents } from '../../utils/sanity/events';
+import type { Lang } from '../../i18n/translations';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const data = {
+	events: await getEvents(lang),
+	recurring: await getRecurringEvents(lang),
+};
+
+const json = JSON.stringify(data);
+---
+
+<script type="application/json" id="events-data" set:html={json}></script>

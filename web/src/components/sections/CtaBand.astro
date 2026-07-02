@@ -1,0 +1,28 @@
+---
+import { getUiString } from '../../i18n/runtime';
+import type { Lang } from '../../i18n/translations';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<section class="border-t border-white/7 bg-zr-bg-elevated px-10 py-16 text-center">
+	<div
+		class="font-display mx-auto max-w-[640px] text-[40px] leading-tight font-bold text-white uppercase"
+	>
+		{getUiString('ctaBandTitle', lang)}
+	</div>
+	<div class="mt-3.5 text-base text-zr-text-muted">
+		{getUiString('ctaBandSub', lang)}
+	</div>
+	<button
+		type="button"
+		data-action="open-trial"
+		class="font-condensed mt-7 inline-block cursor-pointer rounded bg-zr-green px-11 py-4 text-[17px] font-bold tracking-wider text-zr-bg uppercase"
+	>
+		{getUiString('ctaTrial', lang)}
+	</button>
+</section>
