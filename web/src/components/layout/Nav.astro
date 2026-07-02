@@ -26,7 +26,7 @@ const homeHref = getRelativeLocaleUrl(locale, '');
 <header
 	class="sticky top-0 z-50 border-b border-white/7 bg-zr-bg/92 backdrop-blur-[10px]"
 >
-	<div class="mx-auto flex max-w-[1240px] items-center justify-between px-10 py-4">
+	<div class="mx-auto flex max-w-[1240px] items-center justify-between px-5 py-4 md:px-10">
 		<a href={homeHref} class="flex cursor-pointer items-center gap-3.5">
 			<img src="/zr-logo.svg" alt="ZRTeam" class="h-11 w-11" width="44" height="44" />
 			<div class="font-condensed text-lg leading-none font-bold tracking-wide text-white">
@@ -37,7 +37,7 @@ const homeHref = getRelativeLocaleUrl(locale, '');
 			</div>
 		</a>
 
-		<div class="nav-desktop flex items-center gap-8">
+		<div class="nav-desktop hidden items-center gap-8 md:flex">
 			<nav class="flex items-center gap-8">
 				{
 					navItems.map((item) => (
@@ -66,5 +66,82 @@ const homeHref = getRelativeLocaleUrl(locale, '');
 				{getUiString('ctaTrial', lang)}
 			</button>
 		</div>
+
+		<button
+			type="button"
+			id="nav-toggle"
+			data-action="toggle-nav"
+			class="nav-toggle flex h-11 w-11 cursor-pointer flex-col items-center justify-center gap-[5px] rounded border border-white/10 bg-zr-bg-surface md:hidden"
+			aria-expanded="false"
+			aria-controls="mobile-nav"
+			aria-label={getUiString('navMenuOpen', lang)}
+		>
+			<span class="nav-bar block h-[2px] w-[18px] rounded-full bg-white"></span>
+			<span class="nav-bar block h-[2px] w-[18px] rounded-full bg-zr-green"></span>
+			<span class="nav-bar block h-[2px] w-[18px] rounded-full bg-white"></span>
+		</button>
 	</div>
 </header>
+
+<div id="mobile-nav" class="mobile-nav" aria-hidden="true">
+	<div class="mobile-nav-backdrop" data-action="close-nav" tabindex="-1"></div>
+
+	<div
+		id="mobile-nav-panel"
+		class="mobile-nav-panel"
+		role="dialog"
+		aria-modal="true"
+		aria-label={getUiString('navMenuOpen', lang)}
+	>
+		<div class="mobile-nav-accent" aria-hidden="true"></div>
+
+		<div class="mobile-nav-inner">
+			<div class="flex items-center justify-between border-b border-white/7 pb-5">
+				<span class="font-condensed text-[11px] font-bold tracking-[4px] text-zr-green uppercase">
+					ZR Team
+				</span>
+				<button
+					type="button"
+					data-action="close-nav"
+					class="mobile-nav-close cursor-pointer text-2xl leading-none text-zr-text-dim"
+					aria-label={getUiString('navMenuClose', lang)}
+				>
+					×
+				</button>
+			</div>
+
+			<nav class="mobile-nav-links mt-8 flex flex-col">
+				{
+					navItems.map((item, index) => (
+						<a
+							href={getRelativeLocaleUrl(locale, item.path)}
+							data-action="close-nav"
+							class:list={[
+								'mobile-nav-link font-display py-4 text-[1.75rem] leading-none font-semibold tracking-wide uppercase transition-colors',
+								currentPath === item.path
+									? 'text-zr-green'
+									: 'text-white hover:text-zr-green',
+							]}
+							aria-current={currentPath === item.path ? 'page' : undefined}
+							style={`--link-index: ${index}`}
+						>
+							{getUiString(item.key, lang)}
+						</a>
+					))
+				}
+			</nav>
+
+			<div class="mobile-nav-footer mt-auto flex flex-col gap-5 border-t border-white/7 pt-6">
+				<LocaleSelector locale={locale} routePath={currentPath} />
+
+				<button
+					type="button"
+					data-action="open-trial"
+					class="font-condensed w-full cursor-pointer rounded bg-zr-green py-4 text-base font-bold tracking-wider text-zr-bg uppercase"
+				>
+					{getUiString('ctaTrial', lang)}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

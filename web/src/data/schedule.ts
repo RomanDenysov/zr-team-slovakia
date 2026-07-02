@@ -19,7 +19,8 @@ export const classColors: Record<ClassType, string> = {
 	'Open Mat': '#b06ae0',
 };
 
-export const scheduleData: ScheduleEntry[] = [
+/** Fallback used when Sanity has no schedule entries yet. */
+export const defaultScheduleData: ScheduleEntry[] = [
 	{ dayIndex: 0, start: '18:00', end: '19:30', type: 'Gi', level: 'all', coach: 'José R.', location: 'KE' },
 	{ dayIndex: 0, start: '19:30', end: '20:30', type: 'Open Mat', level: 'all', coach: '—', location: 'KE' },
 	{ dayIndex: 1, start: '17:00', end: '18:00', type: 'Kids', level: 'kids', coach: 'Marek H.', location: 'KE' },
@@ -49,3 +50,28 @@ export const locationNames: Record<LocationId, string> = {
 export const classTypes: (ClassType | 'ALL')[] = ['ALL', 'Gi', 'No-Gi', 'Kids', 'Open Mat'];
 
 export const legendItems: ClassType[] = ['Gi', 'No-Gi', 'Kids', 'Open Mat'];
+
+export function readScheduleData(): ScheduleEntry[] {
+	if (typeof document === 'undefined') {
+		return defaultScheduleData;
+	}
+
+	const el = document.getElementById('schedule-data');
+	if (!el?.textContent) {
+		return defaultScheduleData;
+	}
+
+	try {
+		const parsed = JSON.parse(el.textContent) as ScheduleEntry[];
+		return parsed.length > 0 ? parsed : defaultScheduleData;
+	} catch {
+		return defaultScheduleData;
+	}
+}
+
+export function getScheduleData(): ScheduleEntry[] {
+	return readScheduleData();
+}
+
+/** @deprecated Use getScheduleData() — kept for gradual migration. */
+export const scheduleData = defaultScheduleData;

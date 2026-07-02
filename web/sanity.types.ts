@@ -15,6 +15,21 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type ScheduleEntry = {
+  _id: string;
+  _type: "scheduleEntry";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  dayIndex?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  startTime?: string;
+  endTime?: string;
+  classType?: "Gi" | "No-Gi" | "Kids" | "Open Mat";
+  level?: "all" | "beg" | "adv" | "kids";
+  coach?: string;
+  location?: "KE" | "BA";
+};
+
 export type RecurringEvent = {
   _id: string;
   _type: "recurringEvent";
@@ -213,7 +228,25 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = RecurringEvent | LocalizedString | Event | LocalizedText | SiteSettings | Page | Slug | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes =
+  | ScheduleEntry
+  | RecurringEvent
+  | LocalizedString
+  | Event
+  | LocalizedText
+  | SiteSettings
+  | Page
+  | Slug
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageMetadata
+  | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
+  | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint;
 
 // Source: ../web/src/utils/sanity.ts
 // Variable: PAGES_QUERY
@@ -320,17 +353,30 @@ export type RECURRING_EVENTS_QUERY_RESULT = Array<{
   place: LocalizedString | null;
 }>;
 
+// Source: ../web/src/utils/sanity/schedule.ts
+// Variable: SCHEDULE_QUERY
+// Query: *[_type == "scheduleEntry"] | order(dayIndex asc, startTime asc){    dayIndex,    startTime,    endTime,    classType,    level,    coach,    location  }
+export type SCHEDULE_QUERY_RESULT = Array<{
+  dayIndex: 0 | 1 | 2 | 3 | 4 | 5 | 6 | null;
+  startTime: string | null;
+  endTime: string | null;
+  classType: "Gi" | "Kids" | "No-Gi" | "Open Mat" | null;
+  level: "adv" | "all" | "beg" | "kids" | null;
+  coach: string | null;
+  location: "BA" | "KE" | null;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"page\" && defined(slug.current)] | order(_createdAt desc){\n    _id,\n    title,\n    \"slug\": slug.current,\n    excerpt\n  }": PAGES_QUERY_RESULT;
-    "*[_type == \"page\" && slug.current == $slug][0]{\n    _id,\n    title,\n    \"slug\": slug.current,\n    excerpt,\n    body\n  }": PAGE_QUERY_RESULT;
-    "*[_type == \"page\" && defined(slug.current)]{\n    _id,\n    title,\n    \"slug\": slug.current,\n    excerpt,\n    body\n  }": PAGE_PATHS_QUERY_RESULT;
-    "*[_type == \"page\" && defined(slug.current)]{\n    \"params\": { \"slug\": slug.current }\n  }": PAGE_SLUGS_QUERY_RESULT;
-    "*[_type == \"siteSettings\"][0]{\n    title,\n    description\n  }": SITE_SETTINGS_QUERY_RESULT;
-    "*[_type == \"event\"] | order(startDate asc){\n    eventType,\n    startDate,\n    endDate,\n    title,\n    description,\n    place\n  }": EVENTS_QUERY_RESULT;
-    "*[_type == \"recurringEvent\"] | order(dayOfWeek asc, time asc){\n    title,\n    dayOfWeek,\n    time,\n    place\n  }": RECURRING_EVENTS_QUERY_RESULT;
+    '*[_type == "page" && defined(slug.current)] | order(_createdAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt\n  }': PAGES_QUERY_RESULT;
+    '*[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    body\n  }': PAGE_QUERY_RESULT;
+    '*[_type == "page" && defined(slug.current)]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    body\n  }': PAGE_PATHS_QUERY_RESULT;
+    '*[_type == "page" && defined(slug.current)]{\n    "params": { "slug": slug.current }\n  }': PAGE_SLUGS_QUERY_RESULT;
+    '*[_type == "siteSettings"][0]{\n    title,\n    description\n  }': SITE_SETTINGS_QUERY_RESULT;
+    '*[_type == "event"] | order(startDate asc){\n    eventType,\n    startDate,\n    endDate,\n    title,\n    description,\n    place\n  }': EVENTS_QUERY_RESULT;
+    '*[_type == "recurringEvent"] | order(dayOfWeek asc, time asc){\n    title,\n    dayOfWeek,\n    time,\n    place\n  }': RECURRING_EVENTS_QUERY_RESULT;
+    '*[_type == "scheduleEntry"] | order(dayIndex asc, startTime asc){\n    dayIndex,\n    startTime,\n    endTime,\n    classType,\n    level,\n    coach,\n    location\n  }': SCHEDULE_QUERY_RESULT;
   }
 }
-

@@ -10,8 +10,8 @@ import {
 	type ClassType,
 	type LocationId,
 	classColors,
+	getScheduleData,
 	locationNames,
-	scheduleData,
 } from '../data/schedule';
 
 interface SiteState {
@@ -62,6 +62,7 @@ let state = getState();
 let modal: ModalData | null = null;
 let trialSent = false;
 let partnerSent = false;
+let navOpen = false;
 
 function t() {
 	return translations[state.lang];
@@ -108,8 +109,9 @@ function updateLocButtons(): void {
 	});
 }
 
-function buildWeekDays(): { name: string; classes: typeof scheduleData; empty: boolean; isWeekend: boolean }[] {
+function buildWeekDays(): { name: string; classes: ReturnType<typeof getScheduleData>; empty: boolean; isWeekend: boolean }[] {
 	const tr = t();
+	const scheduleData = getScheduleData();
 	return tr.daysShort.map((name, dayIndex) => {
 		const classes = scheduleData
 			.filter(
@@ -124,7 +126,7 @@ function buildWeekDays(): { name: string; classes: typeof scheduleData; empty: b
 }
 
 function renderClassCard(
-	entry: (typeof scheduleData)[0],
+	entry: ReturnType<typeof getScheduleData>[0],
 	dayIndex: number,
 ): string {
 	const tr = t();
@@ -357,6 +359,35 @@ function closeModal(): void {
 	}
 }
 
+function openNav(): void {
+	const nav = document.getElementById('mobile-nav');
+	const toggle = document.getElementById('nav-toggle');
+	if (!nav || !toggle) return;
+
+	navOpen = true;
+	nav.classList.add('is-open');
+	nav.setAttribute('aria-hidden', 'false');
+	toggle.setAttribute('aria-expanded', 'true');
+	document.body.classList.add('nav-open');
+}
+
+function closeNav(): void {
+	const nav = document.getElementById('mobile-nav');
+	const toggle = document.getElementById('nav-toggle');
+	if (!nav || !toggle) return;
+
+	navOpen = false;
+	nav.classList.remove('is-open');
+	nav.setAttribute('aria-hidden', 'true');
+	toggle.setAttribute('aria-expanded', 'false');
+	document.body.classList.remove('nav-open');
+}
+
+function toggleNav(): void {
+	if (navOpen) closeNav();
+	else openNav();
+}
+
 function renderModal(): void {
 	const el = document.getElementById('site-modal');
 	const panel = document.getElementById('site-modal-panel');
@@ -480,17 +511,29 @@ function handleClick(e: Event): void {
 		const action = actionEl.dataset.action;
 		if (action === 'open-trial') {
 			e.preventDefault();
+			closeNav();
 			openModal({ kind: 'trial' });
 			return;
 		}
 		if (action === 'open-partner') {
 			e.preventDefault();
+			closeNav();
 			openModal({ kind: 'partner' });
 			return;
 		}
 		if (action === 'close-modal') {
 			e.preventDefault();
 			closeModal();
+			return;
+		}
+		if (action === 'toggle-nav') {
+			e.preventDefault();
+			toggleNav();
+			return;
+		}
+		if (action === 'close-nav') {
+			e.preventDefault();
+			closeNav();
 			return;
 		}
 	}
@@ -548,7 +591,13 @@ function handleSubmit(e: Event): void {
 }
 
 function handleKeydown(e: KeyboardEvent): void {
-	if (e.key === 'Escape' && modal) closeModal();
+	if (e.key === 'Escape') {
+		if (navOpen) {
+			closeNav();
+			return;
+		}
+		if (modal) closeModal();
+	}
 }
 
 function init(): void {

@@ -84,11 +84,124 @@
 }
 
 @media (max-width: 768px) {
-	header .nav-desktop {
-		display: none;
-	}
-
 	[data-schedule-grid] {
 		grid-template-columns: 1fr !important;
+	}
+}
+
+/* Mobile navigation */
+.mobile-nav {
+	position: fixed;
+	inset: 0;
+	z-index: 60;
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.mobile-nav.is-open {
+	visibility: visible;
+	pointer-events: auto;
+}
+
+.mobile-nav-backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(7, 9, 7, 0.72);
+	backdrop-filter: blur(4px);
+	opacity: 0;
+	transition: opacity 0.28s ease;
+}
+
+.mobile-nav.is-open .mobile-nav-backdrop {
+	opacity: 1;
+}
+
+.mobile-nav-panel {
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: flex;
+	height: 100%;
+	width: min(100%, 320px);
+	background: var(--color-zr-bg-elevated);
+	transform: translateX(100%);
+	transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobile-nav.is-open .mobile-nav-panel {
+	transform: translateX(0);
+}
+
+.mobile-nav-accent {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 3px;
+	height: 100%;
+	background: var(--color-zr-green);
+}
+
+.mobile-nav-inner {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding: 1.25rem 1.5rem 1.75rem;
+}
+
+.mobile-nav-link {
+	opacity: 0;
+	transform: translateX(12px);
+	transition:
+		opacity 0.25s ease,
+		transform 0.25s ease,
+		color 0.15s ease;
+}
+
+.mobile-nav.is-open .mobile-nav-link {
+	opacity: 1;
+	transform: translateX(0);
+	transition-delay: calc(0.06s + var(--link-index, 0) * 0.05s);
+}
+
+.mobile-nav-close:focus-visible,
+.nav-toggle:focus-visible {
+	outline: 2px solid var(--color-zr-green);
+	outline-offset: 2px;
+}
+
+body.nav-open {
+	overflow: hidden;
+}
+
+body.nav-open .nav-bar:nth-child(1) {
+	transform: translateY(7px) rotate(45deg);
+}
+
+body.nav-open .nav-bar:nth-child(2) {
+	opacity: 0;
+	transform: scaleX(0);
+}
+
+body.nav-open .nav-bar:nth-child(3) {
+	transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-bar {
+	transition:
+		transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+		opacity 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mobile-nav-backdrop,
+	.mobile-nav-panel,
+	.mobile-nav-link,
+	.nav-bar {
+		transition: none;
+	}
+
+	.mobile-nav-link {
+		opacity: 1;
+		transform: none;
 	}
 }

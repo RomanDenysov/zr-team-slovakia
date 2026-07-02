@@ -5,6 +5,7 @@ import ScheduleSection from '../../components/schedule/ScheduleSection.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
 import ModalShell from '../../components/modals/ModalShell.astro';
 import EventsData from '../../components/events/EventsData.astro';
+import ScheduleData from '../../components/schedule/ScheduleData.astro';
 import { localeStaticPaths, resolvePageLang, type Locale } from '../../i18n/locales';
 import { translations } from '../../i18n/translations';
 
@@ -173,5 +174,6 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 	</div>
 
 	<ModalShell slot="modals" />
+	<ScheduleData slot="modals" />
 	<EventsData slot="modals" lang={lang} />
 </Main>

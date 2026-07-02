@@ -70,6 +70,8 @@ export interface Translation {
 	trialDoneB: string;
 	mLocAmen: string;
 	closeLabel: string;
+	navMenuOpen: string;
+	navMenuClose: string;
 	locLong: Record<string, string>;
 	amen: Record<string, string[]>;
 }
@@ -174,6 +176,8 @@ export const translations: Record<Lang, Translation> = {
 		trialDoneB: 'Tvoja prihláška bola odoslaná. Ozveme sa ti čo najskôr.',
 		mLocAmen: 'VYBAVENIE',
 		closeLabel: 'Zavrieť',
+		navMenuOpen: 'Otvoriť menu',
+		navMenuClose: 'Zavrieť menu',
 		locLong: {
 			KE: 'Naša hlavná akadémia v Košiciach s priestrannou matovou plochou, šatňami so sprchami a parkovaním pri hale. Tréningy prebiehajú počas celého týždňa.',
 			BA: 'Bratislavská pobočka v modernom Fight Centre. Zdieľaná komunita, tie isté hodnoty, kompletný rozvrh Gi, No-Gi aj detských tréningov.',
@@ -282,6 +286,8 @@ export const translations: Record<Lang, Translation> = {
 		trialDoneB: 'Your request has been sent. We will be in touch shortly.',
 		mLocAmen: 'FACILITIES',
 		closeLabel: 'Close',
+		navMenuOpen: 'Open menu',
+		navMenuClose: 'Close menu',
 		locLong: {
 			KE: 'Our main academy in Košice with a spacious mat area, changing rooms with showers and parking by the hall. Classes run throughout the week.',
 			BA: 'The Bratislava branch in a modern Fight Centrum. Shared community, the same values, a full schedule of Gi, No-Gi and kids classes.',
@@ -390,6 +396,8 @@ export const translations: Record<Lang, Translation> = {
 		trialDoneB: 'Твою заявку надіслано. Ми скоро зв\u2019яжемося з тобою.',
 		mLocAmen: 'ОБЛАДНАННЯ',
 		closeLabel: 'Закрити',
+		navMenuOpen: 'Відкрити меню',
+		navMenuClose: 'Закрити меню',
 		locLong: {
 			KE: 'Наша головна академія в Кошице з просторим татамі, роздягальнями з душем і парковкою біля зали. Тренування проходять протягом усього тижня.',
 			BA: 'Філія в Братиславі в сучасному Fight Centrum. Спільна громада, ті самі цінності, повний розклад Gi, No-Gi та дитячих тренувань.',

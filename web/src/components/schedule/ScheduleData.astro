@@ -1,0 +1,8 @@
+---
+import { getScheduleEntries } from '../../utils/sanity/schedule';
+
+const entries = await getScheduleEntries();
+const json = JSON.stringify(entries);
+---
+
+<script type="application/json" id="schedule-data" set:html={json}></script>
