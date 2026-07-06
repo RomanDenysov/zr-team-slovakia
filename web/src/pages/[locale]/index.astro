@@ -6,16 +6,16 @@ import CtaBand from '../../components/sections/CtaBand.astro';
 import ModalShell from '../../components/modals/ModalShell.astro';
 import EventsData from '../../components/events/EventsData.astro';
 import ScheduleData from '../../components/schedule/ScheduleData.astro';
-import { localeStaticPaths, resolvePageLang, type Locale } from '../../i18n/locales';
+import { alternateLocaleStaticPaths, resolvePageLang, type Locale } from '../../i18n/locales';
 import { translations } from '../../i18n/translations';
 
 export function getStaticPaths() {
-	return localeStaticPaths();
+	return alternateLocaleStaticPaths();
 }
 
 const locale = Astro.params.locale as Locale;
 const lang = resolvePageLang(locale);
-if (!lang) return Astro.redirect('/sk/');
+if (!lang) return Astro.redirect('/');
 
 const t = translations[lang];
 const scheduleHref = getRelativeLocaleUrl(locale, 'schedule');

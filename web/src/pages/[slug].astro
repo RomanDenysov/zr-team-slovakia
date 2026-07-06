@@ -1,30 +1,23 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { PortableText } from 'astro-portabletext';
-import Main from '../../layouts/main.astro';
-import { getStaticPagePaths } from '../../utils/sanity';
-import { alternateLocales, localeToLang, type Locale } from '../../i18n/locales';
-import type { PAGE_PATHS_QUERY_RESULT } from '../../../sanity.types';
+import Main from '../layouts/main.astro';
+import { getStaticPagePaths } from '../utils/sanity';
+import { defaultLocale, localeToLang } from '../i18n/locales';
+import type { PAGE_PATHS_QUERY_RESULT } from '../../sanity.types';
 
 export async function getStaticPaths() {
-	const pagePaths = await getStaticPagePaths();
-
-	return alternateLocales.flatMap((locale) =>
-		pagePaths.map((entry) => ({
-			params: { locale, slug: entry.params.slug },
-			props: { page: entry.props.page, locale },
-		})),
-	);
+	return getStaticPagePaths();
 }
 
 type Page = NonNullable<PAGE_PATHS_QUERY_RESULT[number]>;
 
 interface Props {
 	page: Page;
-	locale: Locale;
 }
 
-const { page, locale } = Astro.props;
+const { page } = Astro.props;
+const locale = defaultLocale;
 const lang = localeToLang(locale);
 const homeHref = getRelativeLocaleUrl(locale, '');
 ---

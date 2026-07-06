@@ -16,9 +16,16 @@ export default defineConfig({
 		locales: ['sk', 'en', 'uk'],
 		defaultLocale: 'sk',
 		routing: {
-			prefixDefaultLocale: true,
-			redirectToDefaultLocale: true,
+			prefixDefaultLocale: false,
 		},
+	},
+	redirects: {
+		'/sk': '/',
+		'/sk/about': '/about',
+		'/sk/events': '/events',
+		'/sk/partners': '/partners',
+		'/sk/schedule': '/schedule',
+		'/sk/[slug]': '/[slug]',
 	},
 	vite: {
 		plugins: [tailwindcss()],
