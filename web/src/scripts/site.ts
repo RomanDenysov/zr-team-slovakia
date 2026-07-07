@@ -1,11 +1,13 @@
 import { getEvents, getRecurringEvents } from '../data/events';
 import {
 	type Lang,
+	type Translation,
 	getLocationInfo,
 	sponsorPlaceholders,
 	translations,
 } from '../i18n/translations';
 import { getPageLangFromDocument } from '../i18n/runtime';
+import { getRoutePath, isValidLocale, type Locale } from '../i18n/locales';
 import {
 	type ClassType,
 	type LocationId,
@@ -49,6 +51,83 @@ type ModalData =
 	| LocModalData
 	| { kind: 'trial' }
 	| { kind: 'partner' };
+
+const NAV_ITEMS: ReadonlyArray<{ path: string; key: keyof Translation }> = [
+	{ path: 'schedule', key: 'navSchedule' },
+	{ path: 'events', key: 'navEvents' },
+	{ path: 'about', key: 'navAbout' },
+	{ path: 'partners', key: 'navSponsors' },
+];
+
+function getCurrentLocale(): Locale {
+	const segment = window.location.pathname.split('/').filter(Boolean)[0];
+	return isValidLocale(segment) ? segment : 'sk';
+}
+
+function localeHref(locale: Locale, routePath: string): string {
+	return routePath ? `/${locale}/${routePath}` : `/${locale}/`;
+}
+
+function updateNavContent(): void {
+	const tr = t();
+	const locale = getCurrentLocale();
+	const currentPath = getRoutePath(window.location.pathname);
+
+	document.querySelector<HTMLAnchorElement>('[data-nav-home]')?.setAttribute(
+		'href',
+		localeHref(locale, ''),
+	);
+
+	document.querySelectorAll<HTMLAnchorElement>('[data-nav-path]').forEach((link) => {
+		const path = link.dataset.navPath ?? '';
+		link.href = localeHref(locale, path);
+
+		const isActive = path === currentPath;
+		const isDesktop = link.classList.contains('navlink');
+		const isMobile = link.classList.contains('mobile-nav-link');
+
+		if (isDesktop) {
+			link.className = `navlink cursor-pointer text-sm font-semibold tracking-wide transition-colors hover:text-white border-b-2 pb-0.5 ${
+				isActive
+					? 'border-zr-green text-white'
+					: 'border-transparent text-[#c9d2cb]'
+			}`;
+		}
+
+		if (isMobile) {
+			link.className = `mobile-nav-link font-display py-4 text-[1.75rem] leading-none font-semibold tracking-wide uppercase transition-colors ${
+				isActive ? 'text-zr-green' : 'text-white hover:text-zr-green'
+			}`;
+			if (isActive) link.setAttribute('aria-current', 'page');
+			else link.removeAttribute('aria-current');
+		}
+	});
+
+	for (const { path, key } of NAV_ITEMS) {
+		const label = tr[key];
+		if (typeof label !== 'string') continue;
+		document.querySelectorAll<HTMLElement>(`[data-nav-path="${path}"]`).forEach((link) => {
+			link.textContent = label;
+		});
+	}
+
+	document.querySelectorAll<HTMLAnchorElement>('.lang-btn').forEach((link) => {
+		const targetLocale = link.dataset.locale;
+		if (!targetLocale || !isValidLocale(targetLocale)) return;
+
+		link.href = localeHref(targetLocale, currentPath);
+		const active = targetLocale === locale;
+		link.className = `lang-btn rounded px-2.5 py-1.5 text-[11px] font-bold tracking-wide ${
+			active ? 'bg-zr-green text-zr-bg' : 'bg-transparent text-[#c9d2cb] hover:text-white'
+		}`;
+		if (active) link.setAttribute('aria-current', 'page');
+		else link.removeAttribute('aria-current');
+	});
+
+	document.querySelectorAll<HTMLButtonElement>('[data-action="open-trial"]').forEach((btn) => {
+		btn.textContent = tr.ctaTrial;
+	});
+}
 
 function getState(): SiteState {
 	return {
@@ -600,17 +679,22 @@ function handleKeydown(e: KeyboardEvent): void {
 	}
 }
 
-function init(): void {
+function initPage(): void {
 	state.lang = getPageLangFromDocument();
-	document.addEventListener('click', handleClick);
-	document.addEventListener('submit', handleSubmit);
-	document.addEventListener('keydown', handleKeydown);
+	closeModal();
+	closeNav();
+	updateNavContent();
 	initDynamicUI();
 	renderWayItems();
 }
 
+document.addEventListener('click', handleClick);
+document.addEventListener('submit', handleSubmit);
+document.addEventListener('keydown', handleKeydown);
+document.addEventListener('astro:page-load', initPage);
+
 if (document.readyState === 'loading') {
-	document.addEventListener('DOMContentLoaded', init);
+	document.addEventListener('DOMContentLoaded', initPage);
 } else {
-	init();
+	initPage();
 }

@@ -19,6 +19,11 @@ export const siteSettings = defineType({
       type: 'text',
       rows: 3,
     }),
+    defineField({
+      name: 'hero',
+      title: 'Homepage Hero',
+      type: 'heroSection',
+    }),
   ],
   preview: {
     select: {title: 'title'},

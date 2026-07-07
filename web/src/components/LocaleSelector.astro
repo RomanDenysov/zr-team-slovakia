@@ -25,6 +25,7 @@ const localeLabels: Record<Locale, string> = {
 		locales.map((targetLocale) => (
 			<a
 				href={getRelativeLocaleUrl(targetLocale, routePath)}
+				data-locale={targetLocale}
 				class:list={[
 					'lang-btn rounded px-2.5 py-1.5 text-[11px] font-bold tracking-wide',
 					targetLocale === locale

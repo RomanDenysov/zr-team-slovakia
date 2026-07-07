@@ -190,6 +190,51 @@ const scheduleEntries: ScheduleSeed[] = [
   _id: `schedule-${entry.location.toLowerCase()}-d${entry.dayIndex}-${entry.startTime.replace(':', '')}-${entry.classType.toLowerCase().replace(/\s+/g, '-')}`,
 }))
 
+const siteSettings = {
+  _id: 'siteSettings',
+  _type: 'siteSettings' as const,
+  title: 'Zé Radiola Team',
+  description: 'Brazilian Jiu-Jitsu in Košice and Bratislava. Two academies, one team.',
+  hero: {
+    kicker: {
+      sk: 'KOŠICE · BRATISLAVA',
+      en: 'KOŠICE · BRATISLAVA',
+      ua: 'KOŠICE · BRATISLAVA',
+    } satisfies LocalizedString,
+    title: {
+      sk: 'Brazílske jiu-jitsu v Košiciach a Bratislave',
+      en: 'Brazilian Jiu-Jitsu in Košice & Bratislava',
+      ua: 'Бразильське джиу-джитсу в Кошице та Братиславі',
+    } satisfies LocalizedString,
+    subtitle: {
+      sk: 'Tréningy pre každú úroveň, vedené skúsenými trénermi. Dve akadémie, jeden tím — pridaj sa k ZRTeam.',
+      en: 'Classes for every level, led by experienced coaches. Two academies, one team — join ZRTeam.',
+      ua: 'Заняття для будь-якого рівня під керівництвом досвідчених тренерів. Дві академії, одна команда — приєднуйся до ZRTeam.',
+    } satisfies LocalizedText,
+    stats: [
+      {
+        _key: 'stat-academies',
+        value: '2',
+        label: {sk: 'AKADÉMIE', en: 'ACADEMIES', ua: 'АКАДЕМІЇ'} satisfies LocalizedString,
+      },
+      {
+        _key: 'stat-classes',
+        value: '20+',
+        label: {
+          sk: 'TRÉNINGOV / TÝŽDEŇ',
+          en: 'CLASSES / WEEK',
+          ua: 'ЗАНЯТЬ / ТИЖДЕНЬ',
+        } satisfies LocalizedString,
+      },
+      {
+        _key: 'stat-lineage',
+        value: 'IBJJF',
+        label: {sk: 'PÔVOD', en: 'LINEAGE', ua: 'ПОХОДЖЕННЯ'} satisfies LocalizedString,
+      },
+    ],
+  },
+}
+
 async function upsertDocuments(client: SanityClient, docs: Array<Record<string, unknown>>) {
   const transaction = client.transaction()
   for (const doc of docs) {
@@ -216,6 +261,9 @@ async function seed() {
     })),
   )
   console.log(`✓ ${scheduleEntries.length} schedule entries`)
+
+  await upsertDocuments(client, [siteSettings])
+  console.log('✓ site settings with hero content')
 
   console.log('Done.')
 }

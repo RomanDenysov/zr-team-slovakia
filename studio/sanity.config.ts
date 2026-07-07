@@ -1,7 +1,7 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
-import {CalendarIcon, ClockIcon, SyncIcon} from '@sanity/icons'
+import {CalendarIcon, ClockIcon, CogIcon, SyncIcon} from '@sanity/icons'
 import {schemaTypes} from './schemaTypes'
 
 export default defineConfig({
@@ -17,6 +17,13 @@ export default defineConfig({
         S.list()
           .title('Content')
           .items([
+            S.listItem()
+              .title('Site Settings')
+              .icon(CogIcon)
+              .child(
+                S.document().schemaType('siteSettings').documentId('siteSettings').title('Site Settings'),
+              ),
+            S.divider(),
             S.listItem()
               .title('Events')
               .icon(CalendarIcon)

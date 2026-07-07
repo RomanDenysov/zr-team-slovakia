@@ -78,6 +78,34 @@ export type SiteSettings = {
   _rev: string;
   title?: string;
   description?: string;
+  hero?: HeroSection;
+};
+
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type HeroSection = {
+  _type: "heroSection";
+  kicker?: LocalizedString;
+  title?: LocalizedString;
+  subtitle?: LocalizedText;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: LocalizedString;
+    _type: "image";
+  };
+  stats?: Array<
+    {
+      _key: string;
+    } & HeroStat
+  >;
 };
 
 export type Page = {
@@ -113,6 +141,28 @@ export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
+export type HeroStat = {
+  _type: "heroStat";
+  value?: string;
+  label?: LocalizedString;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -151,22 +201,6 @@ export type SanityImageMetadata = {
   thumbHash?: string;
   hasAlpha?: boolean;
   isOpaque?: boolean;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
 };
 
 export type SanityFileAsset = {
@@ -235,14 +269,17 @@ export type AllSanitySchemaTypes =
   | Event
   | LocalizedText
   | SiteSettings
+  | SanityImageAssetReference
+  | HeroSection
   | Page
   | Slug
+  | SanityImageCrop
+  | SanityImageHotspot
+  | HeroStat
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
@@ -353,6 +390,27 @@ export type RECURRING_EVENTS_QUERY_RESULT = Array<{
   place: LocalizedString | null;
 }>;
 
+// Source: ../web/src/utils/sanity/hero.ts
+// Variable: HERO_QUERY
+// Query: *[_type == "siteSettings"][0]{    hero {      kicker,      title,      subtitle,      image {        asset,        hotspot,        crop,        alt      },      stats[] {        value,        label      }    }  }
+export type HERO_QUERY_RESULT = {
+  hero: {
+    kicker: LocalizedString | null;
+    title: LocalizedString | null;
+    subtitle: LocalizedText | null;
+    image: {
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+      alt: LocalizedString | null;
+    } | null;
+    stats: Array<{
+      value: string | null;
+      label: LocalizedString | null;
+    }> | null;
+  } | null;
+} | null;
+
 // Source: ../web/src/utils/sanity/schedule.ts
 // Variable: SCHEDULE_QUERY
 // Query: *[_type == "scheduleEntry"] | order(dayIndex asc, startTime asc){    dayIndex,    startTime,    endTime,    classType,    level,    coach,    location  }
@@ -377,6 +435,7 @@ declare module "@sanity/client" {
     '*[_type == "siteSettings"][0]{\n    title,\n    description\n  }': SITE_SETTINGS_QUERY_RESULT;
     '*[_type == "event"] | order(startDate asc){\n    eventType,\n    startDate,\n    endDate,\n    title,\n    description,\n    place\n  }': EVENTS_QUERY_RESULT;
     '*[_type == "recurringEvent"] | order(dayOfWeek asc, time asc){\n    title,\n    dayOfWeek,\n    time,\n    place\n  }': RECURRING_EVENTS_QUERY_RESULT;
+    '*[_type == "siteSettings"][0]{\n    hero {\n      kicker,\n      title,\n      subtitle,\n      image {\n        asset,\n        hotspot,\n        crop,\n        alt\n      },\n      stats[] {\n        value,\n        label\n      }\n    }\n  }': HERO_QUERY_RESULT;
     '*[_type == "scheduleEntry"] | order(dayIndex asc, startTime asc){\n    dayIndex,\n    startTime,\n    endTime,\n    classType,\n    level,\n    coach,\n    location\n  }': SCHEDULE_QUERY_RESULT;
   }
 }

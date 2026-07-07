@@ -8,6 +8,7 @@ import EventsData from '../../components/events/EventsData.astro';
 import ScheduleData from '../../components/schedule/ScheduleData.astro';
 import { localeStaticPaths, resolvePageLang, type Locale } from '../../i18n/locales';
 import { translations } from '../../i18n/translations';
+import { getHero } from '../../utils/sanity/hero';
 
 export function getStaticPaths() {
 	return localeStaticPaths();
@@ -18,6 +19,7 @@ const lang = resolvePageLang(locale);
 if (!lang) return Astro.redirect('/sk/');
 
 const t = translations[lang];
+const hero = await getHero(lang);
 const scheduleHref = getRelativeLocaleUrl(locale, 'schedule');
 const eventsHref = getRelativeLocaleUrl(locale, 'events');
 const aboutHref = getRelativeLocaleUrl(locale, 'about');
@@ -34,15 +36,15 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 		<div class="hero-grid grid min-h-[520px] grid-cols-[1.05fr_0.95fr]">
 			<div class="flex flex-col justify-center px-10 py-20">
 				<div class="font-condensed mb-4 text-[15px] font-semibold tracking-[5px] text-zr-green">
-					KOŠICE · BRATISLAVA
+					{hero.kicker}
 				</div>
 				<h1
 					class="hero-title font-display text-[66px] leading-none font-bold text-white uppercase"
 				>
-					{t.heroTitle}
+					{hero.title}
 				</h1>
 				<p class="mt-6 max-w-[490px] text-lg leading-relaxed text-zr-text-secondary">
-					{t.heroSub}
+					{hero.subtitle}
 				</p>
 				<div class="mt-9 flex gap-3.5">
 					<button
@@ -60,33 +62,38 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 					</a>
 				</div>
 				<div class="mt-12 flex gap-9">
-					<div>
-						<div class="font-display text-[34px] font-bold text-zr-green">2</div>
-						<div class="text-[13px] tracking-wide text-zr-text-dim">{t.statAcademies}</div>
-					</div>
-					<div>
-						<div class="font-display text-[34px] font-bold text-zr-green">20+</div>
-						<div class="text-[13px] tracking-wide text-zr-text-dim">{t.statClasses}</div>
-					</div>
-					<div>
-						<div class="font-display text-[34px] font-bold text-zr-green">IBJJF</div>
-						<div class="text-[13px] tracking-wide text-zr-text-dim">{t.statLineage}</div>
-					</div>
+					{hero.stats.map((stat) => (
+						<div>
+							<div class="font-display text-[34px] font-bold text-zr-green">{stat.value}</div>
+							<div class="text-[13px] tracking-wide text-zr-text-dim">{stat.label}</div>
+						</div>
+					))}
 				</div>
 			</div>
 			<div
-				class="ph relative flex items-end bg-zr-bg-surface"
+				class="ph relative flex items-end overflow-hidden bg-zr-bg-surface"
 				style="clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%)"
 			>
+				{hero.imageUrl ? (
+					<img
+						src={hero.imageUrl}
+						alt={hero.imageAlt}
+						class="absolute inset-0 h-full w-full object-cover"
+						loading="eager"
+						decoding="async"
+					/>
+				) : null}
 				<img
 					src="/zr-logo.svg"
 					alt=""
 					class="absolute -right-[90px] -bottom-[60px] w-[380px] opacity-[0.08]"
 					aria-hidden="true"
 				/>
-				<span class="p-5 font-mono text-xs tracking-wide text-[#5a6a5d]">
-					[ training / roll photo ]
-				</span>
+				{!hero.imageUrl && (
+					<span class="relative p-5 font-mono text-xs tracking-wide text-[#5a6a5d]">
+						[ training / roll photo ]
+					</span>
+				)}
 			</div>
 		</div>
 
