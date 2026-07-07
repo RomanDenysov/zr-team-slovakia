@@ -1,12 +1,19 @@
 ---
-import Main from '../layouts/main.astro';
-import CtaBand from '../components/sections/CtaBand.astro';
-import ModalShell from '../components/modals/ModalShell.astro';
-import { defaultLocale, localeToLang } from '../i18n/locales';
-import { translations } from '../i18n/translations';
+import Main from '../../layouts/main.astro';
+import CtaBand from '../../components/sections/CtaBand.astro';
+import ModalShell from '../../components/modals/ModalShell.astro';
+import { localePathParams } from '../../i18n/locales';
+import { resolveLocalePageContext } from '../../i18n/pageContext';
+import { translations } from '../../i18n/translations';
 
-const locale = defaultLocale;
-const lang = localeToLang(locale);
+export function getStaticPaths() {
+	return localePathParams();
+}
+
+const pageContext = resolveLocalePageContext(Astro.params.locale);
+if (!pageContext) return Astro.redirect('/');
+
+const { locale, lang } = pageContext;
 const t = translations[lang];
 ---
 

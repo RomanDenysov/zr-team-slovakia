@@ -3,15 +3,17 @@ import Main from '../../layouts/main.astro';
 import ScheduleSection from '../../components/schedule/ScheduleSection.astro';
 import ModalShell from '../../components/modals/ModalShell.astro';
 import ScheduleData from '../../components/schedule/ScheduleData.astro';
-import { alternateLocaleStaticPaths, resolvePageLang, type Locale } from '../../i18n/locales';
+import { localePathParams } from '../../i18n/locales';
+import { resolveLocalePageContext } from '../../i18n/pageContext';
 
 export function getStaticPaths() {
-	return alternateLocaleStaticPaths();
+	return localePathParams();
 }
 
-const locale = Astro.params.locale as Locale;
-const lang = resolvePageLang(locale);
-if (!lang) return Astro.redirect('/');
+const pageContext = resolveLocalePageContext(Astro.params.locale);
+if (!pageContext) return Astro.redirect('/');
+
+const { locale, lang } = pageContext;
 ---
 
 <Main title="Rozvrh — Zé Radiola Team" currentPath="schedule" lang={lang} locale={locale}>

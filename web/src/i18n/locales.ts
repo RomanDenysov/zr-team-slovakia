@@ -29,16 +29,11 @@ export function langToLocale(lang: Lang): Locale {
 	return langToLocaleMap[lang];
 }
 
-export const alternateLocales = locales.filter(
-	(locale): locale is Exclude<Locale, typeof defaultLocale> => locale !== defaultLocale,
-);
-
-export function localeStaticPaths() {
-	return locales.map((locale) => ({ params: { locale } }));
-}
-
-export function alternateLocaleStaticPaths() {
-	return alternateLocales.map((locale) => ({ params: { locale } }));
+// Rest-param routing: default locale gets an empty (unprefixed) segment, others get their prefix.
+export function localePathParams() {
+	return locales.map((locale) => ({
+		params: { locale: locale === defaultLocale ? undefined : locale },
+	}));
 }
 
 export function getRoutePath(pathname: string): string {
