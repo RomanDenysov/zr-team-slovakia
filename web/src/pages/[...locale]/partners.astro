@@ -1,5 +1,6 @@
 ---
 import Main from '../../layouts/main.astro';
+import Container from '../../components/layout/Container.astro';
 import ModalShell from '../../components/modals/ModalShell.astro';
 import { localePathParams } from '../../i18n/locales';
 import { resolveLocalePageContext } from '../../i18n/pageContext';
@@ -17,7 +18,7 @@ const t = translations[lang];
 ---
 
 <Main title="Partneri — Zé Radiola Team" currentPath="partners" lang={lang} locale={locale}>
-	<div class="mx-auto max-w-[1240px] px-10 py-16 text-center">
+	<Container class="max-w-7xl py-16 text-center">
 		<div
 			class="font-condensed mb-2.5 text-sm font-semibold tracking-[4px] text-zr-green"
 		>
@@ -49,7 +50,7 @@ const t = translations[lang];
 				{t.becomePartner}
 			</button>
 		</div>
-	</div>
+	</Container>
 
 	<ModalShell slot="modals" />
 </Main>

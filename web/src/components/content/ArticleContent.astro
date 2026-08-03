@@ -1,0 +1,25 @@
+---
+import { PortableText } from 'astro-portabletext';
+import type { PortableTextBlock } from '@portabletext/types';
+import type { Lang } from '../../i18n/translations';
+import { localizePortableTextImages } from '../../utils/sanity/portableText';
+import ArticleImage from './ArticleImage.astro';
+
+interface Props {
+	body: PortableTextBlock[];
+	lang: Lang;
+}
+
+const { body, lang } = Astro.props;
+const localizedBody = localizePortableTextImages(body, lang);
+
+const components = {
+	type: {
+		image: ArticleImage,
+	},
+};
+---
+
+<div class="article-content mt-8">
+	<PortableText value={localizedBody} components={components} />
+</div>

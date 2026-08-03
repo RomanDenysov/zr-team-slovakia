@@ -1,6 +1,8 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Main from '../../layouts/main.astro';
+import Container from '../../components/layout/Container.astro';
+import Logo from '../../components/layout/Logo.astro';
 import ScheduleSection from '../../components/schedule/ScheduleSection.astro';
 import CtaBand from '../../components/sections/CtaBand.astro';
 import ModalShell from '../../components/modals/ModalShell.astro';
@@ -33,9 +35,9 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 	lang={lang}
 	locale={locale}
 >
-	<div class="mx-auto max-w-7xl pb-12 md:pb-16 lg:pb-20">
+	<Container class="max-w-7xl pb-12 md:pb-16 lg:pb-20">
 		<div class="hero-grid grid min-h-[520px] grid-cols-[1.05fr_0.95fr]">
-			<div class="flex flex-col justify-center px-10 py-20">
+			<div class="flex flex-col justify-center py-20">
 				<div class="font-condensed mb-4 text-[15px] font-semibold tracking-[5px] text-zr-green">
 					{hero.kicker}
 				</div>
@@ -84,11 +86,11 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 						decoding="async"
 					/>
 				) : null}
-				<img
-					src="/zr-logo.svg"
-					alt=""
+				<Logo
+					decorative
 					class="absolute -right-[90px] -bottom-[60px] w-[380px] opacity-[0.08]"
-					aria-hidden="true"
+					width={380}
+					height={380}
 				/>
 				{!hero.imageUrl && (
 					<span class="relative p-5 font-mono text-xs tracking-wide text-[#5a6a5d]">
@@ -98,11 +100,11 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 			</div>
 		</div>
 
-		<section id="schedule" class="border-t border-white/7 px-10 py-16">
+		<section id="schedule" class="border-t border-white/7 py-16">
 			<ScheduleSection lang={lang} kickerKey="schedKicker" titleKey="schedTitle" />
 		</section>
 
-		<section class="border-t border-white/7 px-10 py-16">
+		<section class="border-t border-white/7 py-16">
 			<div class="mb-7 flex items-end justify-between">
 				<div>
 					<div
@@ -127,7 +129,7 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 			<div class="events-preview-grid grid grid-cols-3 gap-4" data-events-preview></div>
 		</section>
 
-		<section class="border-t border-white/7 px-10 py-16">
+		<section class="border-t border-white/7 py-16">
 			<div class="about-grid grid grid-cols-2 items-center gap-12">
 				<div>
 					<div
@@ -154,7 +156,7 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 			</div>
 		</section>
 
-		<section class="border-t border-white/7 px-10 py-16 text-center">
+		<section class="border-t border-white/7 py-16 text-center">
 			<div
 				class="font-condensed mb-2.5 text-sm font-semibold tracking-[4px] text-zr-green"
 			>
@@ -179,7 +181,7 @@ const aboutHref = getRelativeLocaleUrl(locale, 'about');
 		</section>
 
 		<CtaBand lang={lang} />
-	</div>
+	</Container>
 
 	<ModalShell slot="modals" />
 	<ScheduleData slot="modals" />

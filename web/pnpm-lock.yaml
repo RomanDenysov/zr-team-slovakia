@@ -38,9 +38,15 @@ importers:
       canvas-confetti:
         specifier: ^1.9.4
         version: 1.9.4
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       groq:
         specifier: ^6.3.0
         version: 6.3.0
+      tailwind-merge:
+        specifier: ^3.6.0
+        version: 3.6.0
       tailwindcss:
         specifier: ^4.2.1
         version: 4.3.2
@@ -51,6 +57,12 @@ importers:
       '@types/node':
         specifier: ^26.1.0
         version: 26.1.0
+      imagetracerjs:
+        specifier: ^1.2.6
+        version: 1.2.6
+      pngjs:
+        specifier: ^7.0.0
+        version: 7.0.0
 
 packages:
 
@@ -3658,6 +3670,9 @@ packages:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
 
+  imagetracerjs@1.2.6:
+    resolution: {integrity: sha512-LKJlnKmXFzDdh6IZtXTyBxXcCLTAkwgKYS+NMiPXiXVnlTLjQC8fq7U89laUSgHtypJB3TdMMDK4ecG5NI/Cgw==}
+
   import-meta-resolve@4.2.0:
     resolution: {integrity: sha512-Iqv2fzaTQN28s/FwZAoFq0ZSs/7hMAHJVX+w8PZl3cY19Pxk6jFFalxQoIfW2826i/fDLXv8IiEZRIT0lDuWcg==}
 
@@ -4561,6 +4576,10 @@ packages:
     resolution: {integrity: sha512-Kb2dcpMsIutFw2hYrN0EhsAXOUJTd6FVMIxvNAkZCMQLVt9NGZqQczvGpYDxNWCZeCWLHUPxQIBudWzt1h7VVA==}
     engines: {node: '>=14.0.0'}
 
+  pngjs@7.0.0:
+    resolution: {integrity: sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==}
+    engines: {node: '>=14.19.0'}
+
   polished@4.3.1:
     resolution: {integrity: sha512-OBatVyC/N7SCW/FaDHrSd+vn0o5cS855TOmYi4OkdWUMSJCET/xip//ch8xGUvtr3i44X9LVyWwQlRMTN3pwSA==}
     engines: {node: '>=10'}
@@ -5131,6 +5150,9 @@ packages:
   tagged-tag@1.0.0:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
+
+  tailwind-merge@3.6.0:
+    resolution: {integrity: sha512-uxL7qAVQriqRQPAyK3pj66VqskWqoZ37PW94jwOTwNfq/z9oyu1V+eqrZqtR2+fCiXdYOZe/Modt8GtvqNzu+w==}
 
   tailwindcss@4.3.2:
     resolution: {integrity: sha512-WtctNNSH8A9jlMIqxzuYumOHU5uGZyRv0Q5svQl+oEPy5w84YpBxdb7MdqyiSPQge5jTJ6zFQLq0PFygdccSBA==}
@@ -9881,6 +9903,8 @@ snapshots:
 
   ignore@5.3.2: {}
 
+  imagetracerjs@1.2.6: {}
+
   import-meta-resolve@4.2.0: {}
 
   indent-string@4.0.0: {}
@@ -10956,6 +10980,8 @@ snapshots:
 
   pluralize-esm@9.0.5: {}
 
+  pngjs@7.0.0: {}
+
   polished@4.3.1:
     dependencies:
       '@babel/runtime': 7.29.7
@@ -11782,6 +11808,8 @@ snapshots:
   symbol-tree@3.2.4: {}
 
   tagged-tag@1.0.0: {}
+
+  tailwind-merge@3.6.0: {}
 
   tailwindcss@4.3.2: {}
 

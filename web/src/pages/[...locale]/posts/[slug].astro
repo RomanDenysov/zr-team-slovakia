@@ -1,0 +1,75 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Main from '../../../layouts/main.astro';
+import Container from '../../../components/layout/Container.astro';
+import ArticleContent from '../../../components/content/ArticleContent.astro';
+import CoverImage from '../../../components/content/CoverImage.astro';
+import { locales, defaultLocale, type Locale } from '../../../i18n/locales';
+import { localeToLang } from '../../../i18n/locales';
+import { translations } from '../../../i18n/translations';
+import { getPost, getPostSlugs } from '../../../utils/sanity/posts';
+
+export async function getStaticPaths() {
+	const slugs = await getPostSlugs();
+
+	return locales.flatMap((locale) =>
+		slugs.map((slug) => ({
+			params: {
+				locale: locale === defaultLocale ? undefined : locale,
+				slug,
+			},
+			props: { locale },
+		})),
+	);
+}
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const lang = localeToLang(locale);
+const t = translations[lang];
+const post = await getPost(Astro.params.slug ?? '', lang);
+if (!post) return Astro.redirect(getRelativeLocaleUrl(locale, 'posts'));
+
+const postsHref = getRelativeLocaleUrl(locale, 'posts');
+---
+
+<Main
+	title={`${post.title} — ZR Team`}
+	description={post.excerpt}
+	currentPath="posts"
+	lang={lang}
+	locale={locale}
+>
+	<Container class="max-w-3xl py-16">
+		<a
+			class="font-condensed text-sm font-bold tracking-wide text-zr-green uppercase hover:underline"
+			href={postsHref}
+		>
+			← {t.postsTitle}
+		</a>
+		<article class="mt-8">
+			<div class="font-condensed text-[13px] font-bold tracking-wide text-zr-green">
+				{post.date}
+			</div>
+			<h1 class="font-display mt-2 text-4xl leading-tight font-bold text-white uppercase">
+				{post.title}
+			</h1>
+			{
+				post.imageUrl ? (
+					<CoverImage
+						src={post.imageUrl}
+						alt={post.imageAlt}
+						class="mt-6 aspect-video w-full rounded-lg object-cover"
+					/>
+				) : null
+			}
+			{post.excerpt && (
+				<p class="mt-4 text-lg leading-relaxed text-zr-text-secondary">{post.excerpt}</p>
+			)}
+			<ArticleContent body={post.body} lang={lang} />
+		</article>
+	</Container>
+</Main>

@@ -1,0 +1,56 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Main from '../../layouts/main.astro';
+import Container from '../../components/layout/Container.astro';
+import ContentCard from '../../components/content/ContentCard.astro';
+import { localePathParams } from '../../i18n/locales';
+import { resolveLocalePageContext } from '../../i18n/pageContext';
+import { translations } from '../../i18n/translations';
+import { getPosts } from '../../utils/sanity/posts';
+
+export function getStaticPaths() {
+	return localePathParams();
+}
+
+const pageContext = resolveLocalePageContext(Astro.params.locale);
+if (!pageContext) return Astro.redirect('/');
+
+const { locale, lang } = pageContext;
+const t = translations[lang];
+const posts = await getPosts(lang);
+---
+
+<Main title={`${t.postsTitle} — ZR Team`} currentPath="posts" lang={lang} locale={locale}>
+	<Container class="max-w-7xl py-16">
+		<div
+			class="font-condensed mb-2.5 text-sm font-semibold tracking-[4px] text-zr-green"
+		>
+			{t.postsKicker}
+		</div>
+		<h1 class="font-display mb-2 text-5xl leading-none font-bold text-white uppercase">
+			{t.postsTitle}
+		</h1>
+		<p class="mb-12 max-w-[560px] text-base text-zr-text-muted">
+			{t.postsLead}
+		</p>
+
+		{
+			posts.length > 0 ? (
+				<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+					{posts.map((post) => (
+						<ContentCard
+							href={getRelativeLocaleUrl(locale, `posts/${post.slug}`)}
+							kicker={post.date}
+							title={post.title}
+							excerpt={post.excerpt}
+							imageUrl={post.imageUrl}
+							imageAlt={post.imageAlt}
+						/>
+					))}
+				</div>
+			) : (
+				<p class="text-zr-text-muted">—</p>
+			)
+		}
+	</Container>
+</Main>

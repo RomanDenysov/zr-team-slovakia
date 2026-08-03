@@ -23,6 +23,13 @@ export const event = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {source: 'title.sk', maxLength: 96},
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'startDate',
       title: 'Start date',
       type: 'date',
@@ -44,7 +51,27 @@ export const event = defineType({
       name: 'description',
       title: 'Description',
       type: 'localizedText',
+      description: 'Short summary for cards and listings',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'body',
+      title: 'Body',
+      type: 'localizedBlockContent',
+      description: 'Full event page content',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'coverImage',
+      title: 'Cover image',
+      type: 'contentImage',
+      description: 'Shown on cards and at the top of the event page',
+    }),
+    defineField({
+      name: 'registrationUrl',
+      title: 'Registration URL',
+      type: 'url',
+      description: 'Optional link for sign-up or tickets',
     }),
     defineField({
       name: 'place',
@@ -65,11 +92,13 @@ export const event = defineType({
       title: 'title.sk',
       startDate: 'startDate',
       eventType: 'eventType',
+      media: 'coverImage',
     },
-    prepare({title, startDate, eventType}) {
+    prepare({title, startDate, eventType, media}) {
       return {
         title: title ?? 'Untitled event',
         subtitle: [startDate, eventType].filter(Boolean).join(' · '),
+        media,
       }
     },
   },

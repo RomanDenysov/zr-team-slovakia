@@ -1,5 +1,6 @@
 ---
 import Main from '../../layouts/main.astro';
+import Container from '../../components/layout/Container.astro';
 import ScheduleSection from '../../components/schedule/ScheduleSection.astro';
 import ModalShell from '../../components/modals/ModalShell.astro';
 import ScheduleData from '../../components/schedule/ScheduleData.astro';
@@ -17,9 +18,9 @@ const { locale, lang } = pageContext;
 ---
 
 <Main title="Rozvrh — Zé Radiola Team" currentPath="schedule" lang={lang} locale={locale}>
-	<div class="mx-auto max-w-[1240px] px-10 py-16">
+	<Container class="max-w-7xl py-16">
 		<ScheduleSection lang={lang} kickerKey="schedKicker" titleKey="schedTitle" titleSize="xl" />
-	</div>
+	</Container>
 
 	<ModalShell slot="modals" />
 	<ScheduleData slot="modals" />

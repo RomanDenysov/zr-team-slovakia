@@ -68,6 +68,11 @@ function localeHref(locale: Locale, routePath: string): string {
 	return routePath ? `/${locale}/${routePath}` : `/${locale}/`;
 }
 
+function eventHref(slug: string): string {
+	const locale = getCurrentLocale();
+	return localeHref(locale, `events/${slug}`);
+}
+
 function updateNavContent(): void {
 	const tr = t();
 	const locale = getCurrentLocale();
@@ -265,6 +270,14 @@ function renderAllSchedules(): void {
 	document.querySelectorAll<HTMLElement>('[data-schedule-legend]').forEach(renderLegend);
 }
 
+function eventCardImage(ev: { imageUrl: string | null; imageAlt: string; title: string }): string {
+	if (ev.imageUrl) {
+		return `<img src="${escapeHtml(ev.imageUrl)}" alt="${escapeHtml(ev.imageAlt || ev.title)}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" loading="lazy" decoding="async" />`;
+	}
+
+	return `<div class="ph flex h-full items-end bg-zr-bg-surface p-3.5"><span class="font-mono text-[11px] text-[#5a6a5d]">[ event photo ]</span></div>`;
+}
+
 function renderEventsSections(): void {
 	const events = getEvents();
 	const tr = t();
@@ -274,17 +287,17 @@ function renderEventsSections(): void {
 			.slice(0, 3)
 			.map(
 				(ev) => `
-			<div class="overflow-hidden rounded-lg border border-white/7 bg-zr-bg-card">
-				<div class="ph relative flex h-[130px] items-end bg-zr-bg-surface p-3.5">
-					<span class="absolute top-3 left-3.5 font-condensed rounded bg-zr-green px-2.5 py-1 text-xs font-bold tracking-wide text-zr-bg">${escapeHtml(ev.tag)}</span>
-					<span class="font-mono text-[11px] text-[#5a6a5d]">[ event photo ]</span>
+			<a href="${eventHref(ev.slug)}" class="group block overflow-hidden rounded-lg border border-white/7 bg-zr-bg-card transition-colors hover:border-zr-green/40">
+				<div class="relative h-[130px] overflow-hidden bg-zr-bg-surface">
+					<span class="absolute top-3 left-3.5 z-10 font-condensed rounded bg-zr-green px-2.5 py-1 text-xs font-bold tracking-wide text-zr-bg">${escapeHtml(ev.tag)}</span>
+					${eventCardImage(ev)}
 				</div>
 				<div class="p-5">
 					<div class="font-condensed text-[13px] font-bold tracking-wide text-zr-green">${escapeHtml(ev.date)}</div>
-					<div class="font-display mt-1.5 text-xl leading-tight font-semibold text-white uppercase">${escapeHtml(ev.title)}</div>
+					<div class="font-display mt-1.5 text-xl leading-tight font-semibold text-white uppercase group-hover:text-zr-green">${escapeHtml(ev.title)}</div>
 					<div class="mt-3 text-[12.5px] text-zr-text-faint">${escapeHtml(ev.place)}</div>
 				</div>
-			</div>`,
+			</a>`,
 			)
 			.join('');
 	});
@@ -300,19 +313,23 @@ function renderEventsSections(): void {
 				</div>
 				<div class="relative border-l-2 border-white/10 pb-9 pl-8">
 					<span class="absolute -left-2 top-1 h-3.5 w-3.5 rounded-full border-[3px] border-zr-bg bg-zr-green"></span>
-					<div class="overflow-hidden rounded-lg border border-white/7 bg-zr-bg-card">
-						<div class="ph flex h-[120px] items-end bg-zr-bg-surface p-3.5">
-							<span class="font-mono text-[11px] text-[#5a6a5d]">[ event photo ]</span>
+					<a href="${eventHref(ev.slug)}" class="group block overflow-hidden rounded-lg border border-white/7 bg-zr-bg-card transition-colors hover:border-zr-green/40">
+						<div class="relative h-[120px] overflow-hidden bg-zr-bg-surface">
+							${
+								ev.imageUrl
+									? `<img src="${escapeHtml(ev.imageUrl)}" alt="${escapeHtml(ev.imageAlt || ev.title)}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" loading="lazy" decoding="async" />`
+									: `<div class="ph flex h-full items-end p-3.5"><span class="font-mono text-[11px] text-[#5a6a5d]">[ event photo ]</span></div>`
+							}
 						</div>
 						<div class="px-6 py-5">
-							<div class="font-display text-2xl leading-tight font-semibold text-white uppercase">${escapeHtml(ev.title)}</div>
+							<div class="font-display text-2xl leading-tight font-semibold text-white uppercase group-hover:text-zr-green">${escapeHtml(ev.title)}</div>
 							<div class="mt-3 text-[14.5px] leading-relaxed text-zr-text-secondary">${escapeHtml(ev.desc)}</div>
 							<div class="mt-4 flex items-center gap-2">
 								<span class="h-1.5 w-1.5 rounded-full bg-zr-green"></span>
 								<span class="text-[13px] font-semibold text-zr-text-muted">${escapeHtml(ev.place)}</span>
 							</div>
 						</div>
-					</div>
+					</a>
 				</div>
 			</div>`,
 			)

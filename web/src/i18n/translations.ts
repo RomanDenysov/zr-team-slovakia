@@ -53,6 +53,11 @@ export interface Translation {
 	footerRights: string;
 	typeDesc: Record<string, string>;
 	showMore: string;
+	postsKicker: string;
+	postsTitle: string;
+	postsLead: string;
+	showAllPosts: string;
+	eventRegister: string;
 	mClassDay: string;
 	mClassTime: string;
 	mClassLevel: string;
@@ -159,6 +164,11 @@ export const translations: Record<Lang, Translation> = {
 				'Voľný tréning bez vedenia trénera. Priestor na sparing, opakovanie techník a otázky.',
 		},
 		showMore: 'Všetky udalosti',
+		postsKicker: 'NOVINKY',
+		postsTitle: 'Príspevky',
+		postsLead: 'Novinky z klubu, tréningové tipy a príbehy z tatami.',
+		showAllPosts: 'Všetky príspevky',
+		eventRegister: 'Registrovať sa',
 		mClassDay: 'DEŇ',
 		mClassTime: 'ČAS',
 		mClassLevel: 'ÚROVEŇ',
@@ -269,6 +279,11 @@ export const translations: Record<Lang, Translation> = {
 				'Free training without an instructor. Space to spar, drill techniques and ask questions.',
 		},
 		showMore: 'All events',
+		postsKicker: 'NEWS',
+		postsTitle: 'Posts',
+		postsLead: 'Club news, training tips and stories from the mats.',
+		showAllPosts: 'All posts',
+		eventRegister: 'Register',
 		mClassDay: 'DAY',
 		mClassTime: 'TIME',
 		mClassLevel: 'LEVEL',
@@ -379,6 +394,11 @@ export const translations: Record<Lang, Translation> = {
 				'Вільне тренування без тренера. Простір для спарингу, відпрацювання технік і запитань.',
 		},
 		showMore: 'Усі події',
+		postsKicker: 'НОВИНИ',
+		postsTitle: 'Дописи',
+		postsLead: 'Новини клубу, тренувальні поради та історії з татамі.',
+		showAllPosts: 'Усі дописи',
+		eventRegister: 'Зареєструватися',
 		mClassDay: 'ДЕНЬ',
 		mClassTime: 'ЧАС',
 		mClassLevel: 'РІВЕНЬ',

@@ -1,11 +1,14 @@
 import type { Lang } from '../i18n/translations';
 
 export interface EventItem {
+	slug: string;
 	tag: string;
 	date: string;
 	title: string;
 	desc: string;
 	place: string;
+	imageUrl: string | null;
+	imageAlt: string;
 }
 
 export interface RecurringEventItem {

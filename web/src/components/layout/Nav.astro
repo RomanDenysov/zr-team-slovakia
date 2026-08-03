@@ -1,5 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import Logo from './Logo.astro';
 import LocaleSelector from '../LocaleSelector.astro';
 import { getUiString } from '../../i18n/runtime';
 import type { Lang } from '../../i18n/translations';
@@ -27,9 +28,9 @@ const homeHref = getRelativeLocaleUrl(locale, '');
 	transition:persist="site-nav"
 	class="sticky top-0 z-50 border-b border-white/7 bg-zr-bg/92 backdrop-blur-[10px]"
 >
-	<div class="mx-auto flex max-w-[1240px] items-center justify-between px-5 py-4 md:px-10">
+	<div class="mx-auto flex max-w-7xl container items-center justify-between px-5 py-4 md:px-10">
 		<a href={homeHref} data-nav-home class="flex cursor-pointer items-center gap-3.5">
-			<img src="/zr-logo.svg" alt="ZRTeam" class="h-11 w-11" width="44" height="44" />
+			<Logo class="h-16 w-16" width={64} height={64} />
 			<div class="font-condensed text-lg leading-none font-bold tracking-wide text-white">
 				ZR TEAM
 				<div class="font-body text-[9.5px] font-medium tracking-[3px] text-zr-green">
@@ -100,9 +101,12 @@ const homeHref = getRelativeLocaleUrl(locale, '');
 
 		<div class="mobile-nav-inner">
 			<div class="flex items-center justify-between border-b border-white/7 pb-5">
-				<span class="font-condensed text-[11px] font-bold tracking-[4px] text-zr-green uppercase">
-					ZR Team
-				</span>
+				<a href={homeHref} data-action="close-nav" class="flex cursor-pointer items-center gap-3">
+					<Logo class="h-12 w-12" width={48} height={48} />
+					<span class="font-condensed text-[11px] font-bold tracking-[4px] text-zr-green uppercase">
+						ZR Team
+					</span>
+				</a>
 				<button
 					type="button"
 					data-action="close-nav"

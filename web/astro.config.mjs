@@ -25,6 +25,7 @@ export default defineConfig({
 		'/sk/events': '/events',
 		'/sk/partners': '/partners',
 		'/sk/schedule': '/schedule',
+		'/sk/posts': '/posts',
 	},
 	vite: {
 		plugins: [tailwindcss()],

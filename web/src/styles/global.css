@@ -205,3 +205,67 @@ body.nav-open .nav-bar:nth-child(3) {
 		transform: none;
 	}
 }
+
+.article-content {
+	color: var(--color-zr-text-secondary);
+	font-size: 1rem;
+	line-height: 1.75;
+}
+
+.article-content > :first-child {
+	margin-top: 0;
+}
+
+.article-content p {
+	margin-top: 1.25rem;
+}
+
+.article-content h2 {
+	margin-top: 2rem;
+	font-family: var(--font-display);
+	font-size: 1.5rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--color-zr-text);
+	text-transform: uppercase;
+}
+
+.article-content h3 {
+	margin-top: 1.5rem;
+	font-family: var(--font-display);
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-zr-text);
+	text-transform: uppercase;
+}
+
+.article-content ul,
+.article-content ol {
+	margin-top: 1.25rem;
+	padding-left: 1.5rem;
+}
+
+.article-content li {
+	margin-top: 0.5rem;
+}
+
+.article-content strong {
+	color: var(--color-zr-text);
+	font-weight: 600;
+}
+
+.article-content a {
+	color: var(--color-zr-green);
+	text-decoration: underline;
+}
+
+.article-figure {
+	margin-top: 2rem;
+}
+
+.article-caption {
+	margin-top: 0.75rem;
+	text-align: center;
+	font-size: 0.875rem;
+	color: var(--color-zr-text-faint);
+}

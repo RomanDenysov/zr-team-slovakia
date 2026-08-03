@@ -1,4 +1,5 @@
 ---
+import Logo from './Logo.astro';
 import { getUiString } from '../../i18n/runtime';
 import type { Lang } from '../../i18n/translations';
 
@@ -14,7 +15,7 @@ const { lang } = Astro.props;
 		class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-5 px-10 py-11"
 	>
 		<div class="flex items-center gap-3.5">
-			<img src="/zr-logo.svg" alt="ZRTeam" class="h-10 w-10" width="40" height="40" />
+			<Logo class="h-14 w-14" width={56} height={56} />
 			<div class="font-condensed text-[15px] font-bold tracking-wide text-white">
 				ZÉ RADIOLA TEAM
 				<div class="font-body text-[11px] tracking-wide text-zr-text-faint">
