@@ -1,6 +1,11 @@
 # Migration plan: Astro + Sanity → Next.js + Payload CMS
 
-Status: proposal (not started)
+**Status: implemented.** The rewrite landed in one change on
+`claude/nextjs-payloadcms-migration-2b2ncj`; `web/` is now the Next + Payload
+app and `studio/` is gone. This document is kept as the record of what the old
+stack looked like and why the new one is shaped the way it is — see
+§10 for where the implementation deviates from the plan below.
+
 Author: prepared from a full read of `web/` and `studio/` at commit `65a9853`
 
 ---
@@ -274,3 +279,46 @@ Each phase is one PR against `claude/nextjs-payloadcms-migration-2b2ncj` (or its
 - [ ] An editor can change hero copy, schedule, events, posts, locations and partners in `/admin` and see it live within a revalidation window
 - [ ] Lighthouse ≥ 95 performance / 100 SEO on `/`, `/schedule`, `/events`
 - [ ] `studio/`, old `web/` and the `.dc.html` prototype removed from the repo
+
+---
+
+## 10. What was actually built (deviations from the plan)
+
+The decisions in §2 were settled as: **Postgres** (D1), **Vercel Blob with a
+local-disk fallback** (D2), **re-seed rather than import** (D3 — the Sanity
+dataset held `seed.ts` output, so the same content is now a Payload seed),
+**one app in `web/`, no monorepo** (D4 — the Vercel project keeps its existing
+root directory), **static + on-demand revalidation** (D5), **generic `/:slug`
+kept** (D6). The phasing in §7 was collapsed into a single change set at the
+user's request.
+
+Four things ended up different from the plan text:
+
+1. **No `next-intl`.** The `as-needed` prefix scheme is ~20 lines of middleware
+   (`src/middleware.ts`) plus two redirects in `next.config.mjs`, so the
+   dependency did not earn its place. UI strings are plain typed dictionaries
+   in `src/i18n/messages/`, closed over a `Messages` interface so a missing
+   translation is a type error.
+2. **`ua` → `uk` everywhere.** The plan noted the mismatch; the implementation
+   also collapsed `Lang` (`SK`/`EN`/`UA`) and `Locale` (`sk`/`en`/`uk`) into a
+   single `Locale` type, deleting the four conversion helpers.
+3. **Weekday conventions unified.** `scheduleEntry` was Monday-first and
+   `recurringEvent` was Sunday-first. Both are Monday-first now, so the seeded
+   Saturday/Sunday open mats moved from `6`/`0` to `5`/`6`.
+4. **`pnpm seed` runs under `tsx`, not `payload run`.** `payload run`
+   transpiles to CJS and returned without executing the script's async entry
+   point; `node --env-file-if-exists=.env --import tsx` runs it reliably.
+
+Content that used to be hardcoded in `translations.ts` is now editable: the two
+academies (`locations`), the ZR Way cards (`about` global), the class-type
+descriptions and colours (`class-types`), and partners (`partners`, which falls
+back to placeholder tiles while empty).
+
+Verified before merge: `pnpm typecheck` and `pnpm build` clean, all 9 routes ×
+3 locales prerendered, a browser pass over the schedule filters, all four
+modals, both forms (rows land in `form_submissions`), the locale switcher and
+the mobile nav, plus an admin pass over every collection and both globals.
+
+Still open, deliberately: no automated test suite, no image content (the
+placeholder tiles are still placeholders), and the footer's social links are
+still inert `<span>`s as they were in Astro.

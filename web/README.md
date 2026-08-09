@@ -1,13 +1,85 @@
-# Astro with Tailwind
+# ZR Team Slovakia — web
+
+Next.js 16 (App Router) frontend with Payload CMS 3 running inside the same
+app. One deployable: the public site, the admin panel at `/admin` and the REST
+/ GraphQL API at `/api`.
+
+## Requirements
+
+- Node `>=22.12`
+- pnpm 10
+- PostgreSQL 16 (Neon, Vercel Postgres or a local server)
+
+## Getting started
 
 ```sh
-pnpm create astro@latest -- --template with-tailwindcss
+cp .env.example .env      # fill in PAYLOAD_SECRET and DATABASE_URI
+pnpm install
+pnpm seed                 # optional — loads the demo content
+pnpm dev                  # http://localhost:3000, admin at /admin
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/with-tailwindcss/devcontainer.json)
+The first visit to `/admin` asks you to create an admin user. To create one
+from the seed instead, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` before
+running `pnpm seed`.
 
-Astro comes with [Tailwind](https://tailwindcss.com) support out of the box. This example showcases how to style your Astro project with Tailwind.
+## Scripts
 
-For complete setup instructions, please see our [Tailwind Styling Guide](https://docs.astro.build/en/guides/styling/#tailwind).
+| Script | What it does |
+| --- | --- |
+| `pnpm dev` | Next dev server |
+| `pnpm build` / `pnpm start` | production build / serve |
+| `pnpm typecheck` | `tsc --noEmit` |
+| `pnpm seed` | create-or-update the demo content in all three languages |
+| `pnpm generate:types` | regenerate `src/payload-types.ts` after a schema change |
+| `pnpm generate:importmap` | regenerate the admin import map after adding custom components |
+| `pnpm migrate:create` / `pnpm migrate` | Payload database migrations |
+
+Run `generate:types` whenever you change a collection or global — the frontend
+is typed against its output.
+
+## Environment
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `PAYLOAD_SECRET` | yes | signs auth tokens |
+| `DATABASE_URI` | yes | Postgres connection string (use the pooled one on serverless) |
+| `NEXT_PUBLIC_SERVER_URL` | yes in production | canonical URLs, sitemap, hreflang |
+| `BLOB_READ_WRITE_TOKEN` | yes on Vercel | switches uploads to Vercel Blob; without it files go to `public/media`, which serverless hosts cannot write |
+| `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO` | no | emails form submissions to the club; without them submissions are still stored |
+
+## Layout
+
+```
+src/
+├── app/
+│   ├── (frontend)/[locale]/   public site — one root layout per locale
+│   └── (payload)/             admin UI and REST/GraphQL routes
+├── collections/               Payload collections
+├── globals/                   Payload globals (site settings, about page)
+├── components/                React components, grouped by feature
+├── i18n/                      locale config and UI strings
+├── lib/                       Payload local-API accessors and view models
+├── seed/                      demo content + seed runner
+└── payload.config.ts
+```
+
+## Languages and URLs
+
+Slovak is the default locale and is served without a prefix; English and
+Ukrainian are prefixed:
+
+```
+/schedule      /en/schedule      /uk/schedule
+```
+
+`src/middleware.ts` rewrites unprefixed paths onto `/sk/*` internally, and
+`next.config.mjs` redirects any explicit `/sk/*` request back to the bare path.
+Content is translated in Payload (field-level localization, Slovak as the
+fallback); UI labels live in `src/i18n/messages/`.
+
+## Rendering
+
+Every public page is statically generated at build time from the Payload local
+API. Editing content in `/admin` triggers `revalidatePath('/', 'layout')` via
+collection hooks, so changes go live without a redeploy.

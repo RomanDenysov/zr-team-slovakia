@@ -1,37 +1,48 @@
 {
-  "name": "web",
+  "name": "zr-team-web",
+  "version": "1.0.0",
+  "private": true,
   "type": "module",
-  "version": "0.0.1",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "payload": "payload",
+    "generate:types": "payload generate:types",
+    "generate:importmap": "payload generate:importmap",
+    "migrate:create": "payload migrate:create",
+    "migrate": "payload migrate",
+    "seed": "node --env-file-if-exists=.env --import tsx src/seed/run.ts"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.0",
-    "@sanity/astro": "^3.4.1",
-    "@sanity/client": "^7.23.0",
-    "@sanity/image-url": "^2.1.1",
-    "@tailwindcss/vite": "^4.2.1",
-    "@types/canvas-confetti": "^1.9.0",
+    "@payloadcms/db-postgres": "3.87.1",
+    "@payloadcms/email-resend": "3.87.1",
+    "@payloadcms/next": "3.87.1",
+    "@payloadcms/richtext-lexical": "3.87.1",
+    "@payloadcms/storage-vercel-blob": "3.87.1",
+    "@payloadcms/ui": "3.87.1",
+    "@tailwindcss/postcss": "^4.2.1",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^7.0.4",
-    "astro-portabletext": "^0.13.0",
-    "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
-    "groq": "^6.3.0",
+    "graphql": "^16.8.1",
+    "next": "16.3.0",
+    "payload": "3.87.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "sharp": "^0.34.4",
     "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.2.1",
-    "vite": "^8.0.13"
+    "tailwindcss": "^4.2.1"
   },
-  "packageManager": "pnpm@10.30.0+sha512.2b5753de015d480eeb88f5b5b61e0051f05b4301808a82ec8b840c9d2adf7748eb352c83f5c1593ca703ff1017295bc3fdd3119abb9686efc96b9fcb18200937",
   "devDependencies": {
-    "@types/node": "^26.1.0",
-    "imagetracerjs": "^1.2.6",
-    "pngjs": "^7.0.0"
-  }
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.4",
+    "tsx": "^4.23.11",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@10.30.0+sha512.2b5753de015d480eeb88f5b5b61e0051f05b4301808a82ec8b840c9d2adf7748eb352c83f5c1593ca703ff1017295bc3fdd3119abb9686efc96b9fcb18200937"
 }
