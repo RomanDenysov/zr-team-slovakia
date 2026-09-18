@@ -2,6 +2,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '../access'
+import { revalidateContent } from '../hooks/revalidate'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -28,6 +29,10 @@ export const Media: CollectionConfig = {
     ],
     focalPoint: true,
     mimeTypes: ['image/*'],
+  },
+  hooks: {
+    afterChange: [revalidateContent],
+    afterDelete: [revalidateContent],
   },
   fields: [
     {

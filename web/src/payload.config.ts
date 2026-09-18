@@ -21,11 +21,13 @@ import { Users } from './collections/Users'
 import { About } from './globals/About'
 import { Settings } from './globals/Settings'
 import { locales, defaultLocale } from './i18n/config'
+import { getDatabaseUri, getServerURL } from './lib/env'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const blobToken = process.env.BLOB_READ_WRITE_TOKEN
 const resendKey = process.env.RESEND_API_KEY
+const databaseUri = getDatabaseUri() ?? ''
 
 export default buildConfig({
   admin: {
@@ -37,7 +39,7 @@ export default buildConfig({
       titleSuffix: '— ZR Team',
     },
   },
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL,
+  serverURL: getServerURL(),
   collections: [
     Pages,
     Posts,
@@ -65,8 +67,13 @@ export default buildConfig({
   editor: lexicalEditor(),
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI ?? '',
+      connectionString: databaseUri,
+      // Serverless hosts (Vercel) should not keep a pool of connections.
+      max: process.env.VERCEL ? 1 : 10,
     },
+    // Schema changes go through committed migrations (`pnpm migrate`).
+    push: false,
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
   secret: process.env.PAYLOAD_SECRET ?? '',
   typescript: {

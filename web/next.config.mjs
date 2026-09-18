@@ -6,6 +6,7 @@ const nextConfig = {
     remotePatterns: [
       // Vercel Blob — used once BLOB_READ_WRITE_TOKEN is set.
       { protocol: 'https', hostname: '*.public.blob.vercel-storage.com' },
+      { protocol: 'https', hostname: '*.blob.vercel-storage.com' },
     ],
   },
   async redirects() {

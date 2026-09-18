@@ -1,12 +1,13 @@
 import type { MetadataRoute } from 'next'
 import { defaultLocale, htmlLang, localeHref, locales } from '../i18n/config'
 import { getEventSlugs, getPageSlugs, getPostSlugs } from '../lib/content'
+import { getServerURL } from '../lib/env'
 import { RESERVED_SLUGS } from '../collections/Pages'
 
 const STATIC_ROUTES = ['', 'schedule', 'events', 'posts', 'about', 'partners']
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = (process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000').replace(/\/$/, '')
+  const base = getServerURL() ?? 'http://localhost:3000'
 
   const [eventSlugs, postSlugs, pageSlugs] = await Promise.all([
     getEventSlugs(),

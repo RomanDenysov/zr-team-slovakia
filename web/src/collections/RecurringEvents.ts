@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '../access'
+import { revalidateContent } from '../hooks/revalidate'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -18,6 +19,10 @@ export const RecurringEvents: CollectionConfig = {
     delete: authenticated,
   },
   defaultSort: ['dayIndex', 'time'],
+  hooks: {
+    afterChange: [revalidateContent],
+    afterDelete: [revalidateContent],
+  },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
     {

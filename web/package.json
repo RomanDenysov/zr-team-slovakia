@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "payload migrate && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "payload": "payload",

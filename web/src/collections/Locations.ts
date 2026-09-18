@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { anyone, authenticated } from '../access'
+import { revalidateContent } from '../hooks/revalidate'
 
 export const Locations: CollectionConfig = {
   slug: 'locations',
@@ -16,6 +17,10 @@ export const Locations: CollectionConfig = {
     delete: authenticated,
   },
   defaultSort: 'order',
+  hooks: {
+    afterChange: [revalidateContent],
+    afterDelete: [revalidateContent],
+  },
   fields: [
     {
       name: 'code',

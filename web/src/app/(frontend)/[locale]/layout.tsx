@@ -10,6 +10,7 @@ import { ModalProvider } from '../../../components/modals/ModalProvider'
 import { htmlLang, isLocale, locales, type Locale } from '../../../i18n/config'
 import { getMessages } from '../../../i18n/messages'
 import { getLocations, getSettings } from '../../../lib/content'
+import { getServerURL } from '../../../lib/env'
 import '../globals.css'
 
 const oswald = Oswald({
@@ -46,7 +47,7 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {}
 
   const settings = await getSettings({ locale })
-  const base = process.env.NEXT_PUBLIC_SERVER_URL
+  const base = getServerURL()
 
   return {
     metadataBase: base ? new URL(base) : undefined,

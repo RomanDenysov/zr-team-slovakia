@@ -10,6 +10,8 @@ setup, scripts and environment variables.
   `Nav`, modals, forms) are `'use client'`. Do not fetch content in the client.
 - **Regenerate types after schema edits.** Change a collection or global →
   `pnpm generate:types`. `src/payload-types.ts` is generated; never edit it.
+- **Schema changes need a migration.** After editing collections/globals run
+  `pnpm migrate:create` and commit `src/migrations/`. Do not rely on `push`.
 - **Content vs. labels.** Editorial copy belongs in Payload. Only UI chrome
   (button labels, section kickers, weekday names) belongs in
   `src/i18n/messages/`, and every string must exist in all three locales —
@@ -28,7 +30,7 @@ pnpm build
 ```
 
 A local Postgres must be reachable for `build` — pages are prerendered from the
-database.
+database. Required env is listed in `.env.example`.
 
 ## Documentation
 
