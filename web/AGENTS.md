@@ -29,8 +29,8 @@ pnpm typecheck
 pnpm build
 ```
 
-A local Postgres must be reachable for `build` — pages are prerendered from the
-database. Required env is listed in `.env.example`.
+The Neon database must be reachable for `build` — pages are prerendered from
+it. Required env is listed in `.env.example`.
 
 ## Documentation
 

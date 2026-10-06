@@ -8,6 +8,14 @@
  * so attaching a marketplace database just works.
  */
 export function getDatabaseUri(): string | undefined {
+  // Schema migrations go over a direct connection: Neon's pooler runs
+  // PgBouncer in transaction mode, which Neon advises against for DDL.
+  // `vercel-build` sets PAYLOAD_MIGRATING for the `payload migrate` step only.
+  if (process.env.PAYLOAD_MIGRATING) {
+    const direct = process.env.DATABASE_URL_UNPOOLED || process.env.POSTGRES_URL_NON_POOLING
+    if (direct) return direct
+  }
+
   const value =
     process.env.DATABASE_URI ||
     process.env.DATABASE_URL ||

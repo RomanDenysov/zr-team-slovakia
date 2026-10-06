@@ -8,7 +8,7 @@ app. One deployable: the public site, the admin panel at `/admin` and the REST
 
 - Node `>=22.12`
 - pnpm 10
-- PostgreSQL 16 (Neon, Vercel Postgres or a local server)
+- A Neon Postgres database (one project; a branch per environment)
 
 ## Getting started
 
@@ -45,15 +45,17 @@ is typed against its output.
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `PAYLOAD_SECRET` | yes | signs auth tokens. Generate with `openssl rand -base64 32` |
-| `DATABASE_URI` | yes | Postgres URL. `DATABASE_URL` (Neon) and `POSTGRES_URL` (Vercel Postgres) are accepted as aliases. Use the pooled URL on serverless |
+| `DATABASE_URI` | yes | Neon Postgres URL. `DATABASE_URL` and `POSTGRES_URL` are accepted as aliases, so on Vercel the Neon integration's injected variables work as-is. Use the pooled URL |
+| `DATABASE_URL_UNPOOLED` | on Vercel | direct connection used only by `payload migrate` in `vercel-build`; injected by the Neon integration |
 | `NEXT_PUBLIC_SERVER_URL` | yes in production | canonical URLs, sitemap, hreflang. On Vercel Preview, `https://$VERCEL_URL` is used if this is unset |
 | `BLOB_READ_WRITE_TOKEN` | yes on Vercel | switches uploads to Vercel Blob; without it files go to `public/media`, which serverless hosts cannot write. Auto-set if you attach a Blob store |
 | `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO` | no | emails form submissions to the club; without them submissions are still stored |
 | `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` | no | create the first `/admin` user from `pnpm seed` |
 
 The Vercel project root directory is `web`. `web/vercel.json` pins the
-framework to Next.js (the production project was created as Astro) and runs
-`pnpm vercel-build`.
+framework to Next.js (the production project was created as Astro), runs
+`pnpm vercel-build`, and pins functions to `fra1` (Frankfurt) — create the Neon
+project in AWS Frankfurt (`eu-central-1`) so the database sits next to them.
 
 ## Layout
 
