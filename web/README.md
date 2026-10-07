@@ -30,7 +30,7 @@ running `pnpm seed`.
 | --- | --- |
 | `pnpm dev` | Next dev server |
 | `pnpm build` / `pnpm start` | production build / serve |
-| `pnpm vercel-build` | `payload migrate` then `next build` — used by Vercel |
+| `pnpm vercel-build` | used by Vercel: `payload migrate`, seed the demo content **only if the database is empty**, create the first admin from `SEED_ADMIN_*` while no users exist, then `next build` |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm seed` | create-or-update the demo content in all three languages |
 | `pnpm generate:types` | regenerate `src/payload-types.ts` after a schema change |
@@ -50,7 +50,7 @@ is typed against its output.
 | `NEXT_PUBLIC_SERVER_URL` | yes in production | canonical URLs, sitemap, hreflang. On Vercel Preview, `https://$VERCEL_URL` is used if this is unset |
 | `BLOB_READ_WRITE_TOKEN` | yes on Vercel | switches uploads to Vercel Blob; without it files go to `public/media`, which serverless hosts cannot write. Auto-set if you attach a Blob store |
 | `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO` | no | emails form submissions to the club; without them submissions are still stored |
-| `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` | no | create the first `/admin` user from `pnpm seed` |
+| `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` | recommended on Vercel | first `/admin` user, created by the build while the users table is empty — so the admin is claimed before the site is public. Use a strong password |
 
 The Vercel project root directory is `web`. `web/vercel.json` pins the
 framework to Next.js (the production project was created as Astro), runs

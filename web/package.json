@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "PAYLOAD_MIGRATING=true payload migrate && next build",
+    "vercel-build": "PAYLOAD_MIGRATING=true payload migrate && node --import tsx src/seed/run.ts --if-empty && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "payload": "payload",

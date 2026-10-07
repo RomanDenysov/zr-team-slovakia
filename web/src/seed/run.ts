@@ -90,6 +90,20 @@ function pick<T>(value: L<T>, locale: Locale): T {
 async function seed() {
   const payload = await getPayload({ config })
 
+  // `--if-empty` runs on every Vercel build: it seeds a fresh database once and
+  // then never again, so editors' changes are not overwritten by later deploys.
+  // `settings.title` is required, so it is set on any database that has been
+  // seeded or edited in /admin.
+  if (process.argv.includes('--if-empty')) {
+    const existing = await payload.findGlobal({ slug: 'settings', depth: 0 })
+    if (existing.title) {
+      payload.logger.info('Database already has content — skipping seed.')
+      await ensureAdmin(payload)
+      process.exit(0)
+    }
+    payload.logger.info('Empty database — seeding demo content.')
+  }
+
   // ---------------------------------------------------------------- class types
   const classTypeIds = new Map<string, number>()
   for (const type of classTypes) {
@@ -232,19 +246,27 @@ async function seed() {
   }
   payload.logger.info('✓ site settings and about page')
 
-  // -------------------------------------------------------------- first editor
-  const email = process.env.SEED_ADMIN_EMAIL
-  const password = process.env.SEED_ADMIN_PASSWORD
-  if (email && password) {
-    const existing = await payload.find({ collection: 'users', limit: 1 })
-    if (existing.totalDocs === 0) {
-      await payload.create({ collection: 'users', data: { email, password } })
-      payload.logger.info(`✓ admin user ${email}`)
-    }
-  }
+  await ensureAdmin(payload)
 
   payload.logger.info('Seed complete.')
   process.exit(0)
+}
+
+/**
+ * Create the first /admin user from SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD.
+ * Runs on every build, but only acts while the users table is empty — so the
+ * admin is claimed before the site is public, and never touched afterwards.
+ */
+async function ensureAdmin(payload: Payload) {
+  const email = process.env.SEED_ADMIN_EMAIL
+  const password = process.env.SEED_ADMIN_PASSWORD
+  if (!email || !password) return
+
+  const existing = await payload.find({ collection: 'users', limit: 1, depth: 0 })
+  if (existing.totalDocs > 0) return
+
+  await payload.create({ collection: 'users', data: { email, password } })
+  payload.logger.info(`✓ admin user ${email}`)
 }
 
 seed().catch((error) => {
