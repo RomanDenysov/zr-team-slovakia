@@ -68,8 +68,14 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: databaseUri,
-      // Serverless hosts (Vercel) should not keep a pool of connections.
-      max: process.env.VERCEL ? 1 : 10,
+      // Payload holds one connection for a transaction while issuing other
+      // queries on a second one, so a pool of 1 deadlocks: `payload migrate`
+      // and every write hung forever on Vercel with `max: 1`. Neon's pooled
+      // endpoint (PgBouncer) absorbs many client connections, so 10 is safe.
+      max: 10,
+      // Fail with "timeout exceeded when trying to connect" instead of waiting
+      // forever for an unreachable database or an exhausted pool.
+      connectionTimeoutMillis: 15_000,
     },
     // Schema changes go through committed migrations (`pnpm migrate`).
     push: false,

@@ -30,7 +30,7 @@ running `pnpm seed`.
 | --- | --- |
 | `pnpm dev` | Next dev server |
 | `pnpm build` / `pnpm start` | production build / serve |
-| `pnpm vercel-build` | used by Vercel: `payload migrate`, seed the demo content **only if the database is empty**, create the first admin from `SEED_ADMIN_*` while no users exist, then `next build` |
+| `pnpm vercel-build` | used by Vercel: preflight (fails fast if the database was touched by a dev-mode schema push, which would otherwise make `migrate` wait forever), `payload migrate`, seed the demo content **only if the database is empty**, create the first admin from `SEED_ADMIN_*` while no users exist, then `next build` |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm seed` | create-or-update the demo content in all three languages |
 | `pnpm generate:types` | regenerate `src/payload-types.ts` after a schema change |
