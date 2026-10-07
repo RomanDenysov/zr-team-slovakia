@@ -5,9 +5,9 @@ import { defaultLocale, isLocale } from './i18n/config'
  * The default locale is served without a prefix, so `/schedule` is rewritten
  * to `/sk/schedule` internally while `/en/schedule` passes straight through.
  * `/sk/*` is redirected to the bare path by `next.config.mjs`, which runs
- * before middleware.
+ * before the proxy. (Next 16 renamed `middleware.ts` to `proxy.ts`.)
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const firstSegment = pathname.split('/')[1]
 

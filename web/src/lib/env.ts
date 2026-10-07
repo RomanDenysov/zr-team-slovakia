@@ -13,7 +13,7 @@ export function getDatabaseUri(): string | undefined {
   // `vercel-build` sets PAYLOAD_MIGRATING for the `payload migrate` step only.
   if (process.env.PAYLOAD_MIGRATING) {
     const direct = process.env.DATABASE_URL_UNPOOLED || process.env.POSTGRES_URL_NON_POOLING
-    if (direct) return direct
+    if (direct) return withVerifiedSsl(direct)
   }
 
   const value =
@@ -21,7 +21,17 @@ export function getDatabaseUri(): string | undefined {
     process.env.DATABASE_URL ||
     process.env.POSTGRES_URL ||
     process.env.POSTGRES_PRISMA_URL
-  return value || undefined
+  return value ? withVerifiedSsl(value) : undefined
+}
+
+/**
+ * Neon issues URLs with `sslmode=require`. pg 8 already treats that as
+ * `verify-full`, but warns on every connection that pg 9 will weaken it to
+ * libpq's "encrypt, don't verify". Spelling out `verify-full` keeps today's
+ * certificate check, silences the warning and survives the pg 9 upgrade.
+ */
+function withVerifiedSsl(url: string): string {
+  return url.replace(/([?&])sslmode=require(?=&|$)/, '$1sslmode=verify-full')
 }
 
 /**

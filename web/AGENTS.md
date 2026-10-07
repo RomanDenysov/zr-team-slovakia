@@ -17,7 +17,7 @@ setup, scripts and environment variables.
   `src/i18n/messages/`, and every string must exist in all three locales —
   `Messages` is a closed interface, so TypeScript will tell you.
 - **URLs are load-bearing.** Slovak is unprefixed, `/en/*` and `/uk/*` are
-  prefixed. Routing lives in `src/middleware.ts` plus the redirects in
+  prefixed. Routing lives in `src/proxy.ts` plus the redirects in
   `next.config.mjs`; changing either changes public URLs.
 - **A `'use server'` module may only export async functions.** Shared state and
   types for actions live in `src/actions/form-state.ts`.

@@ -83,7 +83,7 @@ Ukrainian are prefixed:
 /schedule      /en/schedule      /uk/schedule
 ```
 
-`src/middleware.ts` rewrites unprefixed paths onto `/sk/*` internally, and
+`src/proxy.ts` rewrites unprefixed paths onto `/sk/*` internally, and
 `next.config.mjs` redirects any explicit `/sk/*` request back to the bare path.
 Content is translated in Payload (field-level localization, Slovak as the
 fallback); UI labels live in `src/i18n/messages/`.
